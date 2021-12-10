@@ -17,3 +17,7 @@
 - https://wadod.net/bookshelf/category/2
 - http://alnadeem-bks.malecso.org/cgi-bin/koha/opac-main.pl
 - https://alkitabdar.com/manuscripts/
+
+
+# Conference Books
+- [ICNAR 2021 - Document analysis and recognition workshop](https://drive.google.com/file/d/1zR-cvALCmVh3QyjULts9RtNbxXhOwK1a/view?usp=sharing)
