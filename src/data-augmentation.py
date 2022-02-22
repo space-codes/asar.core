@@ -33,7 +33,7 @@ folder = 'segdata'
 for classfolder in os.listdir(folder):
     images = os.listdir(folder + '/' + classfolder)
     length = len(images)
-    if length <= 20:
+    if 0 < length <= 20:
         for i in range(20):
             randIndex = random.randint(1, length)
             randIndex = randIndex - 1
