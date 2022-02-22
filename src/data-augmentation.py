@@ -34,6 +34,7 @@ for classfolder in os.listdir(folder):
     images = os.listdir(folder + '/' + classfolder)
     length = len(images)
     if 0 < length <= 20:
+        print("augmenting " + classfolder + " ...")
         for i in range(20):
             randIndex = random.randint(1, length)
             randIndex = randIndex - 1
