@@ -4,6 +4,7 @@ from tensorflow.keras.models import load_model, Model
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras import backend as K
 from tensorflow.keras.applications.densenet import DenseNet121
+from tensorflow.keras.applications.densenet import preprocess_input
 import matplotlib.pyplot as plt
 
 def densenet121_model(img_rows=224, img_cols=224, channels=3, num_classes=1000, dropout_keep_prob=0.2):
@@ -67,7 +68,7 @@ def densenet121_model(img_rows=224, img_cols=224, channels=3, num_classes=1000, 
 
 train_datagen = ImageDataGenerator(
       #rescale=1./255,
-      #preprocessing_function=preprocess_input,
+      preprocessing_function=preprocess_input,
       rotation_range=40,
       width_shift_range=0.2,
       height_shift_range=0.2,
