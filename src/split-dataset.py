@@ -8,7 +8,7 @@ import splitfolders
 root_dir = 'segdata/'
 new_root = 'dataset/'
 classes = [folderClass for folderClass in os.listdir(root_dir)]
-splitfolders.ratio(root_dir, output=new_root, seed=42, ratio=(.8, 0.1,0.1))
+splitfolders.ratio(root_dir, output=new_root, seed=1337, ratio=(.8, 0.1,0.1))
 #
 # ## creating partition of the data after shuffeling
 #
