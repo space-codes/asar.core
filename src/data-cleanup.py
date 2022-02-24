@@ -4,4 +4,4 @@ folder = 'segdata'
 for classfolder in os.listdir(folder):
     length = len(os.listdir(folder + '/' + classfolder))
     if length <= 0:
-        os.remove(folder + '/' + classfolder)
+        os.rmdir(folder + '/' + classfolder)

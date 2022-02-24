@@ -89,6 +89,8 @@ history = model.fit_generator(
       verbose=1)
 
 
+model.save('arabic-manuscripts.h5')
+
 acc = history.history['acc']
 val_acc = history.history['val_acc']
 loss = history.history['loss']
