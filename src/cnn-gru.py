@@ -7,14 +7,13 @@ import matplotlib.pyplot as plt
 
 def base_model(img_width, img_height,num_classes, weight_path=None):
     if K.image_data_format() == 'channels_first':
-        input_shape = (3, img_width, img_height)
+        input_shapes = (3, img_width, img_height)
     else:
-        input_shape = (img_width, img_height, 3)
+        input_shapes = (img_width, img_height, 3)
 
     rnn_size = 64
     rnn_size1 = 128
     # model = Sequential()
-    input_shapes = (img_height, img_width, 3)
     input = Input(shape=input_shapes)
 
     x = Convolution2D(64, (3, 3), strides=(1, 1), dilation_rate=(1, 1), activation='relu', use_bias=True,
@@ -63,7 +62,7 @@ def base_model(img_width, img_height,num_classes, weight_path=None):
     # model = create_googlenet()
     from tensorflow.keras.optimizers import SGD, Adam, Adadelta
 
-    adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+    adam = Adam(learning_rate=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
     model.compile(loss='categorical_crossentropy',
                   optimizer=adam,
@@ -99,7 +98,7 @@ train_generator = train_datagen.flow_from_directory(
         # This is the target directory
         'dataset/train',
         # All images will be resized to 150x150
-        target_size=(310, 310),
+        target_size=(128, 128),
         batch_size=32,
         # binary: use binary_crossentropy loss, we need binary labels
         # categorical : use categorical_crossentropy loss, then need categorical labels
@@ -108,18 +107,18 @@ train_generator = train_datagen.flow_from_directory(
 val_generator = train_datagen.flow_from_directory(
         # This is the target directory
         'dataset/val',
-        target_size=(310, 310),
+        target_size=(128, 128),
         batch_size=32,
         class_mode='categorical')
 
 test_generator = train_datagen.flow_from_directory(
         'dataset/test',
-        target_size=(310, 310),
+        target_size=(128, 128),
         batch_size=32,
         class_mode='categorical')
 
 num_of_classes = len(train_generator.class_indices)
-model = base_model(310,310,num_of_classes)
+model = base_model(128, 128,num_of_classes)
 
 history = model.fit(
       train_generator,
@@ -129,7 +128,7 @@ history = model.fit(
       validation_steps=50,
       verbose=1)
 
-model.save('arabic-manuscripts.h5')
+model.save('arabic-manuscripts-1.h5')
 
 acc = history.history['acc']
 val_acc = history.history['val_acc']

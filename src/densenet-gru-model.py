@@ -86,7 +86,7 @@ train_generator = train_datagen.flow_from_directory(
         # This is the target directory
         'dataset/train',
         # All images will be resized to 150x150
-        target_size=(310, 310),
+        target_size=(128, 128),
         batch_size=32,
         # binary: use binary_crossentropy loss, we need binary labels
         # categorical : use categorical_crossentropy loss, then need categorical labels
@@ -95,13 +95,13 @@ train_generator = train_datagen.flow_from_directory(
 val_generator = train_datagen.flow_from_directory(
         # This is the target directory
         'dataset/val',
-        target_size=(310, 310),
+        target_size=(128, 128),
         batch_size=32,
         class_mode='categorical')
 
 test_generator = train_datagen.flow_from_directory(
         'dataset/test',
-        target_size=(310, 310),
+        target_size=(128, 128),
         batch_size=32,
         class_mode='categorical')
 
@@ -117,7 +117,7 @@ history = model.fit(
       validation_steps=50,
       verbose=1)
 
-model.save('arabic-manuscripts.h5')
+model.save('arabic-manuscripts-3.h5')
 
 acc = history.history['acc']
 val_acc = history.history['val_acc']
