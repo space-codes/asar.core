@@ -105,7 +105,9 @@ test_generator = train_datagen.flow_from_directory(
         batch_size=32,
         class_mode='categorical')
 
-model = densenet121_model(img_rows=310, img_cols=310, channels= 3, num_classes=65, dropout_keep_prob=0.5)
+num_of_classes = len(train_generator.class_indices)
+
+model = densenet121_model(img_rows=310, img_cols=310, channels= 3, num_classes=num_of_classes, dropout_keep_prob=0.5)
 
 history = model.fit_generator(
       train_generator,
@@ -116,7 +118,6 @@ history = model.fit_generator(
       verbose=1)
 
 model.save('arabic-manuscripts.h5')
-
 
 acc = history.history['acc']
 val_acc = history.history['val_acc']

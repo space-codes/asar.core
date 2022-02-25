@@ -5,7 +5,7 @@ from tensorflow.keras.regularizers import l2
 from tensorflow.keras import backend as K
 import matplotlib.pyplot as plt
 
-def base_model(img_width, img_height,weight_path=None):
+def base_model(img_width, img_height,num_classes, weight_path=None):
     if K.image_data_format() == 'channels_first':
         input_shape = (3, img_width, img_height)
     else:
@@ -56,7 +56,7 @@ def base_model(img_width, img_height,weight_path=None):
 
     # x = Dense(937, init='he_normal', activation='softmax')(x)
     x = Flatten()(x)
-    x = Dense(932, activation='softmax')(x)
+    x = Dense(num_classes, activation='softmax')(x)
     # loss1_classifier_act = Activation('softmax')(loss1_classifier)
 
     model = Model(inputs=input, outputs=x)
@@ -118,7 +118,8 @@ test_generator = train_datagen.flow_from_directory(
         batch_size=32,
         class_mode='categorical')
 
-model = base_model(310,310)
+num_of_classes = len(train_generator.class_indices)
+model = base_model(310,310,num_of_classes)
 
 history = model.fit_generator(
       train_generator,
