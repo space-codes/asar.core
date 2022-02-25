@@ -9,7 +9,11 @@ import matplotlib.pyplot as plt
 
 def densenet121_model(img_rows=224, img_cols=224, channels=3, num_classes=1000, dropout_keep_prob=0.2):
     # this could also be the output a different Keras model or layer
-    input_tensor = Input(shape=(img_rows, img_cols, channels))  # this assumes K.image_data_format() == 'channels_last'
+    if K.image_data_format() == 'channels_first':
+        input_tensor = Input(shape=(channels, img_rows, img_cols))
+    else:
+        input_tensor = Input(shape=(img_rows, img_cols, channels))
+
     # create the base pre-trained model
     base_model = DenseNet121(input_tensor=input_tensor,weights=None, include_top=False)
 
@@ -36,8 +40,8 @@ def densenet121_model(img_rows=224, img_cols=224, channels=3, num_classes=1000, 
     from keras.utils.vis_utils import plot_model as plot
     from IPython.display import Image
 
-    plot(model, to_file="mdelqqGRU.png", show_shapes=True)
-    Image('mdeqql.png')
+    plot(model, to_file="model-densenet.png", show_shapes=True)
+    Image('model-densenet.png')
     return model
 
 train_datagen = ImageDataGenerator(
@@ -60,7 +64,7 @@ train_generator = train_datagen.flow_from_directory(
         # This is the target directory
         'dataset/train',
         # All images will be resized to 150x150
-        target_size=(310, 310),
+        target_size=(128, 128),
         batch_size=32,
         # binary: use binary_crossentropy loss, we need binary labels
         # categorical : use categorical_crossentropy loss, then need categorical labels
@@ -69,19 +73,20 @@ train_generator = train_datagen.flow_from_directory(
 val_generator = train_datagen.flow_from_directory(
         # This is the target directory
         'dataset/val',
-        target_size=(310, 310),
+        target_size=(128, 128),
         batch_size=32,
         class_mode='categorical')
 
 test_generator = train_datagen.flow_from_directory(
         'dataset/test',
-        target_size=(310, 310),
+        target_size=(128, 128),
         batch_size=32,
         class_mode='categorical')
 
-model = densenet121_model(img_rows=310, img_cols=310, channels= 3, num_classes=65, dropout_keep_prob=0.5)
+num_of_classes = len(train_generator.class_indices)
+model = densenet121_model(img_rows=128, img_cols=128, channels= 3, num_classes=num_of_classes, dropout_keep_prob=0.5)
 
-history = model.fit_generator(
+history = model.fit(
       train_generator,
       steps_per_epoch=100,
       epochs=30,
@@ -89,8 +94,7 @@ history = model.fit_generator(
       validation_steps=50,
       verbose=1)
 
-
-model.save('arabic-manuscripts.h5')
+model.save('arabic-manuscripts-2.h5')
 
 acc = history.history['acc']
 val_acc = history.history['val_acc']

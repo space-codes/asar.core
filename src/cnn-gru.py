@@ -5,16 +5,15 @@ from tensorflow.keras.regularizers import l2
 from tensorflow.keras import backend as K
 import matplotlib.pyplot as plt
 
-def base_model(img_width, img_height,weight_path=None):
+def base_model(img_width, img_height,num_classes, weight_path=None):
     if K.image_data_format() == 'channels_first':
-        input_shape = (3, img_width, img_height)
+        input_shapes = (3, img_width, img_height)
     else:
-        input_shape = (img_width, img_height, 3)
+        input_shapes = (img_width, img_height, 3)
 
     rnn_size = 64
     rnn_size1 = 128
     # model = Sequential()
-    input_shapes = (img_height, img_width, 3)
     input = Input(shape=input_shapes)
 
     x = Convolution2D(64, (3, 3), strides=(1, 1), dilation_rate=(1, 1), activation='relu', use_bias=True,
@@ -56,14 +55,14 @@ def base_model(img_width, img_height,weight_path=None):
 
     # x = Dense(937, init='he_normal', activation='softmax')(x)
     x = Flatten()(x)
-    x = Dense(932, activation='softmax')(x)
+    x = Dense(num_classes, activation='softmax')(x)
     # loss1_classifier_act = Activation('softmax')(loss1_classifier)
 
     model = Model(inputs=input, outputs=x)
     # model = create_googlenet()
     from tensorflow.keras.optimizers import SGD, Adam, Adadelta
 
-    adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+    adam = Adam(learning_rate=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
     model.compile(loss='categorical_crossentropy',
                   optimizer=adam,
@@ -75,8 +74,8 @@ def base_model(img_width, img_height,weight_path=None):
     from keras.utils.vis_utils import plot_model as plot
     from IPython.display import Image
 
-    plot(model, to_file="mdelqqGRU.png", show_shapes=True)
-    Image('mdeqql.png')
+    plot(model, to_file="model-cnn-gru.png", show_shapes=True)
+    Image('model-cnn-gru.png')
     return model
 
 train_datagen = ImageDataGenerator(
@@ -99,7 +98,7 @@ train_generator = train_datagen.flow_from_directory(
         # This is the target directory
         'dataset/train',
         # All images will be resized to 150x150
-        target_size=(310, 310),
+        target_size=(128, 128),
         batch_size=32,
         # binary: use binary_crossentropy loss, we need binary labels
         # categorical : use categorical_crossentropy loss, then need categorical labels
@@ -108,19 +107,20 @@ train_generator = train_datagen.flow_from_directory(
 val_generator = train_datagen.flow_from_directory(
         # This is the target directory
         'dataset/val',
-        target_size=(310, 310),
+        target_size=(128, 128),
         batch_size=32,
         class_mode='categorical')
 
 test_generator = train_datagen.flow_from_directory(
         'dataset/test',
-        target_size=(310, 310),
+        target_size=(128, 128),
         batch_size=32,
         class_mode='categorical')
 
-model = base_model(310,310)
+num_of_classes = len(train_generator.class_indices)
+model = base_model(128, 128,num_of_classes)
 
-history = model.fit_generator(
+history = model.fit(
       train_generator,
       steps_per_epoch=100,
       epochs=30,
@@ -128,7 +128,7 @@ history = model.fit_generator(
       validation_steps=50,
       verbose=1)
 
-model.save('arabic-manuscripts.h5')
+model.save('arabic-manuscripts-1.h5')
 
 acc = history.history['acc']
 val_acc = history.history['val_acc']
