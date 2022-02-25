@@ -9,7 +9,11 @@ import matplotlib.pyplot as plt
 
 def densenet121_model(img_rows=224, img_cols=224, channels=3, num_classes=1000, dropout_keep_prob=0.2):
     # this could also be the output a different Keras model or layer
-    input_tensor = Input(shape=(img_rows, img_cols, channels))  # this assumes K.image_data_format() == 'channels_last'
+    if K.image_data_format() == 'channels_first':
+        input_tensor = Input(shape=(channels, img_rows, img_cols))
+    else:
+        input_tensor = Input(shape=(img_rows, img_cols, channels))
+
     # create the base pre-trained model
     base_model = DenseNet121(input_tensor=input_tensor,weights=None, include_top=False)
 
