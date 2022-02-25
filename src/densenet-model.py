@@ -36,8 +36,8 @@ def densenet121_model(img_rows=224, img_cols=224, channels=3, num_classes=1000, 
     from keras.utils.vis_utils import plot_model as plot
     from IPython.display import Image
 
-    plot(model, to_file="mdelqqGRU.png", show_shapes=True)
-    Image('mdeqql.png')
+    plot(model, to_file="model-densenet.png", show_shapes=True)
+    Image('model-densenet.png')
     return model
 
 train_datagen = ImageDataGenerator(

@@ -74,8 +74,8 @@ def base_model(img_width, img_height,num_classes, weight_path=None):
     from keras.utils.vis_utils import plot_model as plot
     from IPython.display import Image
 
-    plot(model, to_file="mdelqqGRU.png", show_shapes=True)
-    Image('mdeqql.png')
+    plot(model, to_file="model-cnn-gru.png", show_shapes=True)
+    Image('model-cnn-gru.png')
     return model
 
 train_datagen = ImageDataGenerator(
