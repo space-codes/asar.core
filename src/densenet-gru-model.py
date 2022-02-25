@@ -18,8 +18,7 @@ def densenet121_model(img_rows=224, img_cols=224, channels=3, num_classes=1000, 
     x = base_model.output
     x = GlobalAveragePooling2D()(x)
     x = BatchNormalization()(x)
-    x = \
-        (dropout_keep_prob)(x)
+    x = Dropout(dropout_keep_prob)(x)
     # x = Flatten()(x)
     conv_shape = x.get_shape()
     x = Reshape(target_shape=(int(conv_shape[1]), int(conv_shape[2] * conv_shape[3])))(x)
