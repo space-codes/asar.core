@@ -36,20 +36,24 @@ def base_model(img_width, img_height,num_classes, weight_path=None):
     gru_1 = GRU(rnn_size, return_sequences=True, kernel_initializer='he_normal', name='gru1')(x)
     gru_1a = GRU(rnn_size, return_sequences=True, go_backwards=True, kernel_initializer='he_normal', name='gru1_a')(x)
     gru1_merged = Add()([gru_1, gru_1a])
+    gru1_merged = BatchNormalization()(gru1_merged)
 
     gru_2 = GRU(rnn_size, return_sequences=True, kernel_initializer='he_normal', name='gru2')(gru1_merged)
     gru_2a = GRU(rnn_size, return_sequences=True, go_backwards=True, kernel_initializer='he_normal', name='gru2_a')(gru1_merged)
     x = Concatenate(axis=1, name='DYNN/output')([gru_2, gru_2a])
+    x = BatchNormalization()(x)
     # x=Dropout(0.5)(x)
 
 
     gru_3 = GRU(rnn_size, return_sequences=True, kernel_initializer='he_normal', name='gru3')(x)
     gru_3b = GRU(rnn_size, return_sequences=True, go_backwards=True, kernel_initializer='he_normal', name='gru_3b')(x)
     gru3_merged = Add()([gru_3, gru_3b])
+    gru3_merged = BatchNormalization()(gru3_merged)
 
     gru_4 = GRU(rnn_size, return_sequences=True, kernel_initializer='he_normal', name='gru4')(gru3_merged)
     gru_4b = GRU(rnn_size, return_sequences=True, go_backwards=True, kernel_initializer='he_normal', name='gru4_b')(gru3_merged)
     x = Concatenate(axis=1, name='DYNN2/output')([gru_4, gru_4b])
+    x = BatchNormalization()(x)
 
     x = Dropout(0.5)(x)
 

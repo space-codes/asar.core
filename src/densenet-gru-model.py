@@ -18,12 +18,8 @@ def densenet121_model(img_rows=224, img_cols=224, channels=3, num_classes=1000, 
 
     # add a global spatial average pooling layer
     x = base_model.output
-    x = GlobalAveragePooling2D()(x)
-    x = BatchNormalization()(x)
-    x = Dropout(dropout_keep_prob)(x)
-    # x = Flatten()(x)
-    # conv_shape = x.get_shape()
-    # x = Reshape(target_shape=(int(conv_shape[1]), int(conv_shape[2] * conv_shape[3])))(x)
+    conv_shape = x.get_shape()
+    x = Reshape(target_shape=(int(conv_shape[1]), int(conv_shape[2] * conv_shape[3])))(x)
 
     # x = Dense(1024, activation='relu')(x)
     '''
@@ -31,21 +27,25 @@ def densenet121_model(img_rows=224, img_cols=224, channels=3, num_classes=1000, 
     gru_1 = GRU(rnn_size, return_sequences=True, kernel_initializer='he_normal', name='gru1')(x)
     gru_1a = GRU(rnn_size, return_sequences=True, go_backwards=True, kernel_initializer='he_normal', name='gru1_a')(x)
     gru1_merged = Add()([gru_1, gru_1a])
+    gru1_merged = BatchNormalization()(gru1_merged)
 
     gru_2 = GRU(rnn_size, return_sequences=True, kernel_initializer='he_normal', name='gru2')(gru1_merged)
     gru_2a = GRU(rnn_size, return_sequences=True, go_backwards=True, kernel_initializer='he_normal', name='gru2_a')(
         gru1_merged)
     x = Concatenate(axis=1, name='DYNN/output')([gru_2, gru_2a])
+    x = BatchNormalization()(x)
     # x=Dropout(0.5)(x)
 
     gru_3 = GRU(rnn_size, return_sequences=True, kernel_initializer='he_normal', name='gru3')(x)
     gru_3b = GRU(rnn_size, return_sequences=True, go_backwards=True, kernel_initializer='he_normal', name='gru_3b')(x)
     gru3_merged = Add()([gru_3, gru_3b])
+    gru3_merged = BatchNormalization()(gru3_merged)
 
     gru_4 = GRU(rnn_size, return_sequences=True, kernel_initializer='he_normal', name='gru4')(gru3_merged)
     gru_4b = GRU(rnn_size, return_sequences=True, go_backwards=True, kernel_initializer='he_normal', name='gru4_b')(
         gru3_merged)
     x = Concatenate(axis=1, name='DYNN2/output')([gru_4, gru_4b])
+    x = BatchNormalization()(x)
     x = Dropout(dropout_keep_prob)(x)
     x = Flatten()(x)
     x = Dense(units=num_classes, activation='softmax')(x)
@@ -108,7 +108,7 @@ test_generator = train_datagen.flow_from_directory(
 
 num_of_classes = len(train_generator.class_indices)
 
-model = densenet121_model(img_rows=310, img_cols=310, channels= 3, num_classes=num_of_classes, dropout_keep_prob=0.5)
+model = densenet121_model(img_rows=128, img_cols=128, channels= 3, num_classes=num_of_classes, dropout_keep_prob=0.5)
 
 history = model.fit(
       train_generator,
