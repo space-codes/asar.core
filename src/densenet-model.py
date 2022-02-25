@@ -96,8 +96,8 @@ history = model.fit(
 
 model.save('arabic-manuscripts-2.h5')
 
-acc = history.history['acc']
-val_acc = history.history['val_acc']
+acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
 loss = history.history['loss']
 val_loss = history.history['val_loss']
 
