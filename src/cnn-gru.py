@@ -121,7 +121,7 @@ test_generator = train_datagen.flow_from_directory(
 num_of_classes = len(train_generator.class_indices)
 model = base_model(310,310,num_of_classes)
 
-history = model.fit_generator(
+history = model.fit(
       train_generator,
       steps_per_epoch=100,
       epochs=30,
