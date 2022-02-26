@@ -100,12 +100,6 @@ val_generator = train_datagen.flow_from_directory(
         batch_size=32,
         class_mode='categorical')
 
-test_generator = train_datagen.flow_from_directory(
-        'dataset/test',
-        target_size=(128, 128),
-        batch_size=32,
-        class_mode='categorical')
-
 num_of_classes = len(train_generator.class_indices)
 
 model = densenet121_model(img_rows=128, img_cols=128, channels= 3, num_classes=num_of_classes, dropout_keep_prob=0.5)
@@ -140,3 +134,13 @@ plt.title('Training and validation loss')
 plt.legend()
 
 plt.show()
+
+test_generator = test_datagen.flow_from_directory(
+        'dataset/test',
+        target_size=(128, 128),
+        batch_size=1,
+        class_mode='categorical')
+
+test_loss, test_acc = model.evaluate(test_generator, steps=50)
+print('test loss:', test_loss)
+print('test acc:', test_acc)

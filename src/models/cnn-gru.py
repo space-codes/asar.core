@@ -115,12 +115,6 @@ val_generator = train_datagen.flow_from_directory(
         batch_size=32,
         class_mode='categorical')
 
-test_generator = train_datagen.flow_from_directory(
-        'dataset/test',
-        target_size=(128, 128),
-        batch_size=32,
-        class_mode='categorical')
-
 num_of_classes = len(train_generator.class_indices)
 model = base_model(128, 128,num_of_classes)
 
@@ -154,3 +148,13 @@ plt.title('Training and validation loss')
 plt.legend()
 
 plt.show()
+
+test_generator = test_datagen.flow_from_directory(
+        'dataset/test',
+        target_size=(128, 128),
+        batch_size=1,
+        class_mode='categorical')
+
+test_loss, test_acc = model.evaluate(test_generator, steps=50)
+print('test loss:', test_loss)
+print('test acc:', test_acc)
