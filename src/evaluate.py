@@ -7,7 +7,7 @@ from sklearn.metrics import confusion_matrix, classification_report, recall_scor
 from tensorflow.keras.models import load_model
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
-model_name = "arabic-manuscripts-1.h5"
+model_name = "arabic-manuscripts-3.h5"
 
 def show_values(pc, fmt="%.2f", **kw):
     '''
@@ -27,7 +27,6 @@ def show_values(pc, fmt="%.2f", **kw):
             color = (1.0, 1.0, 1.0)
         ax.text(x, y, fmt % value, ha="center", va="center", color=color, **kw)
 
-
 def cm2inch(*tupl):
     '''
     Specify figure size in centimeter in matplotlib
@@ -39,7 +38,6 @@ def cm2inch(*tupl):
         return tuple(i/inch for i in tupl[0])
     else:
         return tuple(i/inch for i in tupl)
-
 
 def heatmap(AUC, title, xlabel, ylabel, xticklabels, yticklabels, figure_width=40, figure_height=20, correct_orientation=False, cmap='RdBu'):
     '''
@@ -96,8 +94,6 @@ def heatmap(AUC, title, xlabel, ylabel, xticklabels, yticklabels, figure_width=4
     #fig.set_size_inches(cm2inch(40*4, 20*4))
     fig.set_size_inches(cm2inch(figure_width, figure_height))
 
-
-
 def plot_classification_report(classification_report, title='Classification report ', cmap='RdBu'):
     '''
     Plot scikit-learn classification report.
@@ -132,13 +128,12 @@ def plot_classification_report(classification_report, title='Classification repo
     correct_orientation = False
     heatmap(np.array(plotMat), title, xlabel, ylabel, xticklabels, yticklabels, figure_width, figure_height, correct_orientation, cmap=cmap)
 
-np.random.seed(123456789)
-
 test_datagen = image.ImageDataGenerator()
 
 test_generator = test_datagen.flow_from_directory(
     'dataset/test',
-    target_size=(64, 64),
+    target_size=(128, 128),
+    batch_size=1,
     shuffle=False,
     class_mode='categorical')
 
