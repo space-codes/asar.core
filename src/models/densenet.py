@@ -1,5 +1,5 @@
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.layers import GlobalAveragePooling2D, Dense, Dropout, Input, BatchNormalization, Flatten, GRU, Add, Concatenate, Reshape
+from tensorflow.keras.layers import GlobalAveragePooling2D, Dense, Dropout, Input, BatchNormalization, Flatten
 from tensorflow.keras.models import load_model, Model
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras import backend as K
@@ -13,41 +13,18 @@ def densenet121_model(img_rows=224, img_cols=224, channels=3, num_classes=1000, 
         input_tensor = Input(shape=(channels, img_rows, img_cols))
     else:
         input_tensor = Input(shape=(img_rows, img_cols, channels))
-    rnn_size = 64
+
+    # create the base pre-trained model
     base_model = DenseNet121(input_tensor=input_tensor,weights=None, include_top=False)
 
     # add a global spatial average pooling layer
     x = base_model.output
-    conv_shape = x.get_shape()
-    x = Reshape(target_shape=(int(conv_shape[1]), int(conv_shape[2] * conv_shape[3])))(x)
-
-    # x = Dense(1024, activation='relu')(x)
-    '''
-    '''
-    gru_1 = GRU(rnn_size, return_sequences=True, kernel_initializer='he_normal', name='gru1')(x)
-    gru_1a = GRU(rnn_size, return_sequences=True, go_backwards=True, kernel_initializer='he_normal', name='gru1_a')(x)
-    gru1_merged = Add()([gru_1, gru_1a])
-    gru1_merged = BatchNormalization()(gru1_merged)
-
-    gru_2 = GRU(rnn_size, return_sequences=True, kernel_initializer='he_normal', name='gru2')(gru1_merged)
-    gru_2a = GRU(rnn_size, return_sequences=True, go_backwards=True, kernel_initializer='he_normal', name='gru2_a')(
-        gru1_merged)
-    x = Concatenate(axis=1, name='DYNN/output')([gru_2, gru_2a])
-    x = BatchNormalization()(x)
-    # x=Dropout(0.5)(x)
-
-    gru_3 = GRU(rnn_size, return_sequences=True, kernel_initializer='he_normal', name='gru3')(x)
-    gru_3b = GRU(rnn_size, return_sequences=True, go_backwards=True, kernel_initializer='he_normal', name='gru_3b')(x)
-    gru3_merged = Add()([gru_3, gru_3b])
-    gru3_merged = BatchNormalization()(gru3_merged)
-
-    gru_4 = GRU(rnn_size, return_sequences=True, kernel_initializer='he_normal', name='gru4')(gru3_merged)
-    gru_4b = GRU(rnn_size, return_sequences=True, go_backwards=True, kernel_initializer='he_normal', name='gru4_b')(
-        gru3_merged)
-    x = Concatenate(axis=1, name='DYNN2/output')([gru_4, gru_4b])
+    x = GlobalAveragePooling2D()(x)
     x = BatchNormalization()(x)
     x = Dropout(dropout_keep_prob)(x)
     x = Flatten()(x)
+    x = Dense(932, activation='relu')(x)
+    x = BatchNormalization()(x)
     x = Dense(units=num_classes, activation='softmax')(x)
 
     # this is the model we will train
@@ -63,8 +40,8 @@ def densenet121_model(img_rows=224, img_cols=224, channels=3, num_classes=1000, 
     from keras.utils.vis_utils import plot_model as plot
     from IPython.display import Image
 
-    plot(model, to_file="model-densenet-gru.png", show_shapes=True)
-    Image('model-densenet-gru.png')
+    plot(model, to_file="model-densenet.png", show_shapes=True)
+    Image('model-densenet.png')
     return model
 
 train_datagen = ImageDataGenerator(
@@ -100,14 +77,7 @@ val_generator = train_datagen.flow_from_directory(
         batch_size=32,
         class_mode='categorical')
 
-test_generator = train_datagen.flow_from_directory(
-        'dataset/test',
-        target_size=(128, 128),
-        batch_size=32,
-        class_mode='categorical')
-
 num_of_classes = len(train_generator.class_indices)
-
 model = densenet121_model(img_rows=128, img_cols=128, channels= 3, num_classes=num_of_classes, dropout_keep_prob=0.5)
 
 history = model.fit(
@@ -118,7 +88,7 @@ history = model.fit(
       validation_steps=50,
       verbose=1)
 
-model.save('arabic-manuscripts-3.h5')
+model.save('arabic-manuscripts-2.h5')
 
 acc = history.history['accuracy']
 val_acc = history.history['val_accuracy']
@@ -140,3 +110,13 @@ plt.title('Training and validation loss')
 plt.legend()
 
 plt.show()
+
+test_generator = test_datagen.flow_from_directory(
+        'dataset/test',
+        target_size=(128, 128),
+        batch_size=1,
+        class_mode='categorical')
+
+test_loss, test_acc = model.evaluate(test_generator, steps=50)
+print('test loss:', test_loss)
+print('test acc:', test_acc)
