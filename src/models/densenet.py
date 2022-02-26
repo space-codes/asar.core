@@ -82,10 +82,10 @@ model = densenet121_model(img_rows=128, img_cols=128, channels= 3, num_classes=n
 
 history = model.fit(
       train_generator,
-      steps_per_epoch=100,
+      steps_per_epoch=6643,
       epochs=30,
       validation_data=val_generator,
-      validation_steps=50,
+      validation_steps=791,
       verbose=1)
 
 model.save('arabic-manuscripts-2.h5')
