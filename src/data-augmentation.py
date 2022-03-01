@@ -1,7 +1,6 @@
 import numpy as np
 import cv2
 import os
-import shutil
 import random
 
 
@@ -30,15 +29,30 @@ def homographyAugmentation(img, random_limits = (0.9, 1.1)):
 
 
 folder = 'segdata'
-for classfolder in os.listdir(folder):
-    images = os.listdir(folder + '/' + classfolder)
+os.chdir(folder)
+label=0
+for classfolder in os.listdir(os.getcwd()):
+    # rename to fix arabic path problem
+    l = len(str(label))
+    z = 5 - l
+    a = ''
+    for i in range(z):
+        a += '0'
+    labelValue = a + str(label)
+    os.rename(classfolder, labelValue)
+
+    images = os.listdir(os.getcwd() + '/' + labelValue)
     length = len(images)
     if 0 < length <= 20:
         print("augmenting " + classfolder + " ...")
-        for i in range(20):
+        for i in range(40):
             randIndex = random.randint(1, length)
             randIndex = randIndex - 1
             imgName = str(images[randIndex])
-            img = cv2.imread(folder + '/' + classfolder + '/' + imgName)
-            img = homographyAugmentation(img=img)
-            cv2.imwrite(folder + '/' + classfolder + '/' + "augmented_" + str(i) + '.png', img)
+            img = cv2.imread(os.getcwd() + '/' + labelValue + '/' + imgName)
+            if img.any():
+                img = homographyAugmentation(img=img)
+                cv2.imwrite(os.getcwd() + '/' + labelValue + '/' + "augmented_" + str(i) + '.png', img)
+    # rename back to its original label
+    os.rename(labelValue, classfolder)
+    label = label + 1
