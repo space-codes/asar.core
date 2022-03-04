@@ -122,7 +122,7 @@ test_datagen = ImageDataGenerator()
 
 train_generator = train_datagen.flow_from_directory(
         # This is the target directory
-        'testset/train',
+        'dataset/train',
         shuffle= False,
         # All images will be resized to 150x150
         target_size=(128, 128),
@@ -133,14 +133,14 @@ train_generator = train_datagen.flow_from_directory(
 
 val_generator = train_datagen.flow_from_directory(
         # This is the target directory
-        'testset/val',
+        'dataset/val',
         shuffle= False,
         target_size=(128, 128),
         batch_size=1,
         class_mode='binary')
 
 test_generator = test_datagen.flow_from_directory(
-        'testset/test',
+        'dataset/test',
         shuffle= False,
         target_size=(128, 128),
         batch_size=1,
