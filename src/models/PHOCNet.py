@@ -164,8 +164,8 @@ test_generator.reset()
 X_test, y_test = next(test_generator)
 for i in tqdm(range(int(len(test_generator))-1)):
   img, label = next(test_generator)
-  X_test = np.append(X_val, img, axis=0)
-  y_test = np.append(y_val, label, axis=0)
+  X_test = np.append(X_test, img, axis=0)
+  y_test = np.append(y_test, label, axis=0)
 
 num_of_classes = len(train_generator.class_indices)
 test_transcripts = [get_generator_value(test_generator.class_indices, int(i)) for i in y_test]
