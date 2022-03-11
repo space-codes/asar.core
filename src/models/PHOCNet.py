@@ -12,6 +12,11 @@ import pandas as pd
 import math
 import os
 import tensorflow
+import sys
+
+#old_stdout = sys.stdout
+#log_file = open("message.log","w")
+#sys.stdout = log_file
 
 def base_model(img_width, img_height, weight_path=None):
     if K.image_data_format() == 'channels_first':
@@ -50,7 +55,13 @@ def base_model(img_width, img_height, weight_path=None):
     optimizer = Adam(learning_rate=1e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-07, decay=5e-5)
     model.compile(loss=loss, optimizer=optimizer, metrics=[tensorflow.keras.metrics.CosineSimilarity(axis=1)])
     if weight_path:
-        model = load_model(weight_path)
+        df = pd.read_pickle(weight_path)
+        tmp_weights = df.values
+        N = len(tmp_weights)
+        weights = []
+        for i in range(N):
+            weights.append(tmp_weights[i][0])
+        model.set_weights(weights)
 
     model.summary()
     from keras.utils.vis_utils import plot_model as plot
@@ -177,56 +188,69 @@ y_val = np.array(y_val)
 y_test = [generate_label(get_generator_value(test_generator.class_indices, int(i))) for i in y_test]
 y_test = np.array(y_test)
 
-model = base_model(128, 128)
+weight_path = 'phoc_weights.pkl'
+if os.path.exists(weight_path):
+    model = base_model(128, 128, weight_path= weight_path)
+else:
+    model = base_model(128, 128)
 batch_size = 32
 
-history = model.fit(
-    X_train, y_train,
-    steps_per_epoch=math.ceil(train_generator.samples//batch_size),
-    batch_size=batch_size,
-    epochs=100,
-    #shuffle= True,
-    validation_data=(X_val, y_val),
-    validation_steps=math.ceil(val_generator.samples//batch_size),
-    verbose=1)
+map_max = 0
 
-map(model, X_test, y_test, test_transcripts) # Calculates the MAP of the model
-# save the model
-weights = model.get_weights()
-df = pd.DataFrame(weights)
-model.save('phoc-model.h5')
-df.to_pickle('phoc_weights.pkl')
+for i in range(5):
+    history = model.fit(
+        X_train, y_train,
+        steps_per_epoch=math.ceil(train_generator.samples//batch_size),
+        batch_size=batch_size,
+        epochs=1,
+        #shuffle= True,
+        validation_data=(X_val, y_val),
+        validation_steps=math.ceil(val_generator.samples//batch_size),
+        verbose=1)
 
-# Create directory to store training history
+    map_value = map(model, X_test, y_test, test_transcripts) # Calculates the MAP of the model
+    # save the model
+    if map_value > map_max:
+        map_max = map_value
+        weights = model.get_weights()
+        df = pd.DataFrame(weights)
+        print("Saving the best model.......")
+        model.save('phoc-model.h5')
+        df.to_pickle('phoc_weights.pkl')
+#
+# # Create directory to store training history
+#
+# if not os.path.exists("Train_History"):
+#     os.makedirs("Train_History")
+#
+# # Store train history as CSV file
+# model_name="phoc-model"
+# hist_df = pd.DataFrame(history.history)
+# hist_csv_file = 'Train_History/history_'+model_name+'.csv'
+# with open(hist_csv_file, mode='w') as f:
+#     hist_df.to_csv(f)
+#
+# # Plot train and validation accuracy(avg cosine similarity)
+#
+# acc = history.history['cosine_similarity']
+# val_acc = history.history['val_cosine_similarity']
+# loss = history.history['loss']
+# val_loss = history.history['val_loss']
+# epochs = range(1, len(acc) + 1)
+# plt.plot(epochs, acc,label='Training Similarity')
+# plt.plot(epochs, val_acc,label='Validation Similarity')
+# plt.title(model_name+'_Cosine Similarity')
+# plt.legend()
+# plt.savefig('Train_History/'+model_name+'_Pretrain_CS.png')
+# plt.show()
+#
+# # Plot train and validation loss
+# plt.plot(epochs, loss,label='Training Loss')
+# plt.plot(epochs, val_loss,label='Validation Loss')
+# plt.title(model_name+' MSE Loss')
+# plt.legend()
+# plt.savefig('Train_History/'+model_name+'_Pretrain_Loss.png')
+# plt.show()
 
-if not os.path.exists("Train_History"):
-    os.makedirs("Train_History")
-
-# Store train history as CSV file
-model_name="phoc-model"
-hist_df = pd.DataFrame(history.history)
-hist_csv_file = 'Train_History/history_'+model_name+'.csv'
-with open(hist_csv_file, mode='w') as f:
-    hist_df.to_csv(f)
-
-# Plot train and validation accuracy(avg cosine similarity)
-
-acc = history.history['cosine_similarity']
-val_acc = history.history['val_cosine_similarity']
-loss = history.history['loss']
-val_loss = history.history['val_loss']
-epochs = range(1, len(acc) + 1)
-plt.plot(epochs, acc,label='Training Similarity')
-plt.plot(epochs, val_acc,label='Validation Similarity')
-plt.title(model_name+'_Cosine Similarity')
-plt.legend()
-plt.savefig('Train_History/'+model_name+'_Pretrain_CS.png')
-plt.show()
-
-# Plot train and validation loss
-plt.plot(epochs, loss,label='Training Loss')
-plt.plot(epochs, val_loss,label='Validation Loss')
-plt.title(model_name+' MSE Loss')
-plt.legend()
-plt.savefig('Train_History/'+model_name+'_Pretrain_Loss.png')
-plt.show()
+#sys.stdout = old_stdout
+#log_file.close()
