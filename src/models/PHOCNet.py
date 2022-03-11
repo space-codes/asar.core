@@ -203,7 +203,7 @@ for i in range(5):
         steps_per_epoch=math.ceil(train_generator.samples//batch_size),
         batch_size=batch_size,
         epochs=1,
-        #shuffle= True,
+        shuffle= True,
         validation_data=(X_val, y_val),
         validation_steps=math.ceil(val_generator.samples//batch_size),
         verbose=1)
