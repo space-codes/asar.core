@@ -6,7 +6,7 @@ from tensorflow.keras import backend as K
 import matplotlib.pyplot as plt
 from tensorflow_addons.layers import SpatialPyramidPooling2D
 import numpy as np
-from create_phoc_label import generate_label
+from phoc_label_generator import generate_label
 from tqdm import tqdm
 import pandas as pd
 import math
@@ -115,6 +115,10 @@ def get_generator_value(class_indicates, index):
     val_list = list(class_indicates.values())
     return key_list[val_list.index(index)]
 
+train_path = 'dataset/train'
+test_path = 'dataset/test'
+val_path = 'dataset/val'
+
 train_datagen = ImageDataGenerator(
       #rescale=1./255,
       #preprocessing_function=preprocess_input,
@@ -133,7 +137,7 @@ test_datagen = ImageDataGenerator()
 
 train_generator = train_datagen.flow_from_directory(
         # This is the target directory
-        'dataset/train',
+        train_path,
         shuffle= False,
         # All images will be resized to 150x150
         target_size=(128, 128),
@@ -144,41 +148,37 @@ train_generator = train_datagen.flow_from_directory(
 
 val_generator = train_datagen.flow_from_directory(
         # This is the target directory
-        'dataset/val',
+        val_path,
         shuffle= False,
         target_size=(128, 128),
         batch_size=1,
         class_mode='binary')
 
 test_generator = test_datagen.flow_from_directory(
-        'dataset/test',
+        test_path,
         shuffle= False,
         target_size=(128, 128),
         batch_size=1,
         class_mode='binary')
 
 train_generator.reset()
-X_train, y_train = next(train_generator)
-for i in tqdm(range(int(len(train_generator))-1)):
-  img, label = next(train_generator)
-  X_train = np.append(X_train, img, axis=0)
-  y_train = np.append(y_train, label, axis=0)
+y_train = train_generator.labels
+X_train = [np.array(tensorflow.image.resize(imread(train_path + '/' + file), [128,128])) for file in train_generator.filenames]
+X_train = np.array(X_train)
 
 val_generator.reset()
-X_val, y_val = next(val_generator)
-for i in tqdm(range(int(len(val_generator))-1)):
-  img, label = next(val_generator)
-  X_val = np.append(X_val, img, axis=0)
-  y_val = np.append(y_val, label, axis=0)
+y_val = val_generator.labels
+X_val = [np.array(tensorflow.image.resize(imread(val_path + '/' + file), [128,128])) for file in val_generator.filenames]
+X_val = np.array(X_val)
 
 test_generator.reset()
-X_test, y_test = next(test_generator)
-for i in tqdm(range(int(len(test_generator))-1)):
-  img, label = next(test_generator)
-  X_test = np.append(X_test, img, axis=0)
-  y_test = np.append(y_test, label, axis=0)
+y_test = test_generator.labels
+X_test = [np.array(tensorflow.image.resize(imread(test_path + '/' + file), [128,128])) for file in test_generator.filenames]
+X_test = np.array(X_test)
 
-num_of_classes = len(train_generator.class_indices)
+print('Data has been loaded')
+
+# num_of_classes = len(train_generator.class_indices)
 test_transcripts = [get_generator_value(test_generator.class_indices, int(i)) for i in y_test]
 test_transcripts = np.array(test_transcripts)
 y_train = [generate_label(get_generator_value(train_generator.class_indices, int(i))) for i in y_train]
