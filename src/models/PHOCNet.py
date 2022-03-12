@@ -6,7 +6,7 @@ from tensorflow.keras import backend as K
 import matplotlib.pyplot as plt
 from tensorflow_addons.layers import SpatialPyramidPooling2D
 import numpy as np
-from create_phoc_label import generate_label
+from phoc_label_generator import generate_label
 from tqdm import tqdm
 import pandas as pd
 import math
