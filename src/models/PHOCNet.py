@@ -137,7 +137,7 @@ train_generator = train_datagen.flow_from_directory(
         # categorical : use categorical_crossentropy loss, then need categorical labels
         class_mode='binary')
 
-val_generator = train_datagen.flow_from_directory(
+val_generator = val_datagen.flow_from_directory(
         # This is the target directory
         val_path,
         shuffle= False,
