@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from tensorflow_addons.layers import SpatialPyramidPooling2D
 import numpy as np
 from phoc_label_generator import generate_label
-from tqdm import tqdm
+from imageio import imread
 import pandas as pd
 import math
 import os
@@ -48,7 +48,7 @@ def base_model(img_width, img_height, weight_path=None):
     model.add(Dropout(0.5))
     model.add(Dense(4096, activation='relu'))
     model.add(Dropout(0.5))
-    model.add(Dense(3784, activation='sigmoid'))
+    model.add(Dense(830, activation='sigmoid'))
     from tensorflow.keras.optimizers import SGD, Adam, Adadelta
 
     loss = losses.binary_crossentropy
@@ -119,16 +119,7 @@ train_path = 'dataset/train'
 test_path = 'dataset/test'
 val_path = 'dataset/val'
 
-train_datagen = ImageDataGenerator(
-      #rescale=1./255,
-      #preprocessing_function=preprocess_input,
-      rotation_range=40,
-      width_shift_range=0.2,
-      height_shift_range=0.2,
-      shear_range=0.2,
-      zoom_range=0.2,
-      horizontal_flip=True,
-      fill_mode='nearest')
+train_datagen = ImageDataGenerator()
 
 #val_datagen = ImageDataGenerator(rescale=1. / 255.)
 val_datagen = ImageDataGenerator()
@@ -140,40 +131,40 @@ train_generator = train_datagen.flow_from_directory(
         train_path,
         shuffle= False,
         # All images will be resized to 150x150
-        target_size=(128, 128),
+        target_size=(16, 16),
         batch_size=1,
         # binary: use binary_crossentropy loss, we need binary labels
         # categorical : use categorical_crossentropy loss, then need categorical labels
         class_mode='binary')
 
-val_generator = train_datagen.flow_from_directory(
+val_generator = val_datagen.flow_from_directory(
         # This is the target directory
         val_path,
         shuffle= False,
-        target_size=(128, 128),
+        target_size=(16, 16),
         batch_size=1,
         class_mode='binary')
 
 test_generator = test_datagen.flow_from_directory(
         test_path,
         shuffle= False,
-        target_size=(128, 128),
+        target_size=(16, 16),
         batch_size=1,
         class_mode='binary')
 
 train_generator.reset()
 y_train = train_generator.labels
-X_train = [np.array(tensorflow.image.resize(imread(train_path + '/' + file), [128,128])) for file in train_generator.filenames]
+X_train = [np.array(tensorflow.image.resize(imread(train_path + '/' + file), [110,110])) for file in train_generator.filenames]
 X_train = np.array(X_train)
 
 val_generator.reset()
 y_val = val_generator.labels
-X_val = [np.array(tensorflow.image.resize(imread(val_path + '/' + file), [128,128])) for file in val_generator.filenames]
+X_val = [np.array(tensorflow.image.resize(imread(val_path + '/' + file), [110,110])) for file in val_generator.filenames]
 X_val = np.array(X_val)
 
 test_generator.reset()
 y_test = test_generator.labels
-X_test = [np.array(tensorflow.image.resize(imread(test_path + '/' + file), [128,128])) for file in test_generator.filenames]
+X_test = [np.array(tensorflow.image.resize(imread(test_path + '/' + file), [110,110])) for file in test_generator.filenames]
 X_test = np.array(X_test)
 
 print('Data has been loaded')
@@ -190,9 +181,9 @@ y_test = np.array(y_test)
 
 weight_path = 'phoc_weights.pkl'
 if os.path.exists(weight_path):
-    model = base_model(128, 128, weight_path= weight_path)
+    model = base_model(110, 110, weight_path= weight_path)
 else:
-    model = base_model(128, 128)
+    model = base_model(110, 110)
 batch_size = 32
 
 map_max = 0
