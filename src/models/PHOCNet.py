@@ -1,12 +1,12 @@
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.layers import Convolution2D, Dense, Dropout, MaxPooling2D, Flatten
+from tensorflow.keras.layers import Conv2D, Dense, Dropout, MaxPooling2D, Flatten
 from tensorflow.keras.models import load_model, Sequential
 from tensorflow.keras import losses
 from tensorflow.keras import backend as K
 import matplotlib.pyplot as plt
 from tensorflow_addons.layers import SpatialPyramidPooling2D
 import numpy as np
-from phoc_label_generator import generate_label
+from phoc_label_generator import phoc_generate_label
 from imageio import imread
 import pandas as pd
 import math
@@ -25,23 +25,23 @@ def base_model(img_width, img_height, weight_path=None):
         input_shapes = (img_width, img_height, 3)
 
     model = Sequential()
-    model.add(Convolution2D(64, (3, 3), padding='same',
+    model.add(Conv2D(64, (3, 3), padding='same',
                      activation='relu', input_shape=input_shapes))
-    model.add(Convolution2D(64, (3, 3), padding='same', activation='relu'))
-    model.add(Convolution2D(64, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2), strides=2))
-    model.add(Convolution2D(128, (3, 3), padding='same', activation='relu'))
-    model.add(Convolution2D(128, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(128, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(128, (3, 3), padding='same', activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2), strides=2))
-    model.add(Convolution2D(256, (3, 3), padding='same', activation='relu'))
-    model.add(Convolution2D(256, (3, 3), padding='same', activation='relu'))
-    model.add(Convolution2D(256, (3, 3), padding='same', activation='relu'))
-    model.add(Convolution2D(256, (3, 3), padding='same', activation='relu'))
-    model.add(Convolution2D(256, (3, 3), padding='same', activation='relu'))
-    model.add(Convolution2D(256, (3, 3), padding='same', activation='relu'))
-    model.add(Convolution2D(512, (3, 3), padding='same', activation='relu'))
-    model.add(Convolution2D(512, (3, 3), padding='same', activation='relu'))
-    model.add(Convolution2D(512, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(256, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(256, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(256, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(256, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(256, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(256, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(512, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(512, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(512, (3, 3), padding='same', activation='relu'))
     model.add(SpatialPyramidPooling2D([1, 2, 4]))
     model.add(Flatten())
     model.add(Dense(4096, activation='relu'))
@@ -115,9 +115,9 @@ def get_generator_value(class_indicates, index):
     val_list = list(class_indicates.values())
     return key_list[val_list.index(index)]
 
-train_path = 'dataset/train'
-test_path = 'dataset/test'
-val_path = 'dataset/val'
+train_path = 'asar-dataset/train'
+test_path = 'asar-dataset/test'
+val_path = 'asar-dataset/val'
 
 train_datagen = ImageDataGenerator()
 
@@ -172,11 +172,11 @@ print('Data has been loaded')
 # num_of_classes = len(train_generator.class_indices)
 test_transcripts = [get_generator_value(test_generator.class_indices, int(i)) for i in y_test]
 test_transcripts = np.array(test_transcripts)
-y_train = [generate_label(get_generator_value(train_generator.class_indices, int(i))) for i in y_train]
+y_train = [phoc_generate_label(get_generator_value(train_generator.class_indices, int(i))) for i in y_train]
 y_train = np.array(y_train)
-y_val = [generate_label(get_generator_value(val_generator.class_indices, int(i))) for i in y_val]
+y_val = [phoc_generate_label(get_generator_value(val_generator.class_indices, int(i))) for i in y_val]
 y_val = np.array(y_val)
-y_test = [generate_label(get_generator_value(test_generator.class_indices, int(i))) for i in y_test]
+y_test = [phoc_generate_label(get_generator_value(test_generator.class_indices, int(i))) for i in y_test]
 y_test = np.array(y_test)
 
 weight_path = 'phoc_weights.pkl'

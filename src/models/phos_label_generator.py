@@ -46,7 +46,7 @@ def word_vector(word):
 # Input: A word(string) 
 # Output: PHOS vector
 
-def generate_label(word):
+def phos_generate_label(word):
     vector = word_vector(word)
     L = len(word)
     for split in range(2, 6):
