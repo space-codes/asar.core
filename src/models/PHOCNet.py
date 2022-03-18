@@ -12,11 +12,46 @@ import pandas as pd
 import math
 import os
 import tensorflow
+from tensorflow.keras.utils import Sequence
+from tensorflow.keras.preprocessing.image import img_to_array, ImageDataGenerator, load_img
+import random
 import sys
 
 #old_stdout = sys.stdout
 #log_file = open("message.log","w")
 #sys.stdout = log_file
+
+# DataSequence class to pass data(images/vector) in batches
+
+class DataSequence(Sequence):
+    def __init__(self, imagefiles, labels, batch_size):
+        self.bsz = batch_size  # batch size
+
+        # Take labels and a list of image locations in memory
+        self.labels = labels
+        self.im_list = imagefiles
+
+    def __len__(self):
+        # compute number of batches to yield
+        return int(math.ceil(len(self.im_list) / float(self.bsz)))
+
+    def on_epoch_end(self):
+        # Shuffles indexes after each epoch if in training mode
+        self.indexes = range(len(self.im_list))
+        self.indexes = random.sample(self.indexes, k=len(self.indexes))
+
+    def get_batch_labels(self, idx):
+        # Fetch a batch of labels
+        return np.array(self.labels[idx * self.bsz: (idx + 1) * self.bsz])
+
+    def get_batch_features(self, idx):
+        # Fetch a batch of inputs
+        return np.array([img_to_array(load_img(im, target_size=(110, 110))) for im in self.im_list[idx * self.bsz: (1 + idx) * self.bsz]])
+
+    def __getitem__(self, idx):
+        batch_x = self.get_batch_features(idx)
+        batch_y = self.get_batch_labels(idx)
+        return batch_x, batch_y
 
 def base_model(img_width, img_height, weight_path=None):
     if K.image_data_format() == 'channels_first':
@@ -69,47 +104,6 @@ def base_model(img_width, img_height, weight_path=None):
     plot(model, to_file="phocnet.png", show_shapes=True)
     return model
 
-def map(model, x_test, y_test, transcripts):
-  """This module evaluates the partially trained model using Test Data
-  Args:
-    model: Instance of Sequential Class storing Neural Network
-    x_test: Numpy storing the Test Images
-    y_test: Numpy storing the PHOC Labels of Test Data
-    transcripts: String storing the characters in the Image.
-  Returns:
-    map: Floating number storing the Mean Average Precision.
-  """
-  y_pred = model.predict(x_test)
-  y_pred = np.where(y_pred<0.5, 0, 1)
-  N = len(transcripts)
-  precision = {}
-  count = {}
-  for i in range(N):
-    if transcripts[i] not in precision.keys():
-      precision[transcripts[i]] = 1
-      count[transcripts[i]] = 0
-    else:
-      precision[transcripts[i]] += 1
-
-  for i in range(N):
-    pred = y_pred[i]
-    acc = np.sum(abs(y_test-pred), axis=1)
-    tmp = np.argmin(acc)
-    if transcripts[tmp] == transcripts[i]:
-      count[transcripts[tmp]] += 1
-
-  mean_avg_prec = [0, 0]
-  for i in range(N):
-    if precision[transcripts[i]] <= 1:
-      continue
-    mean_avg_prec[0] += count[transcripts[i]]*1.0/precision[transcripts[i]]
-    mean_avg_prec[1] += 1
-
-  map = mean_avg_prec[0]*1./mean_avg_prec[1]
-  print ("The Mean Average Precision = ", map)
-  print ("Total test cases = ", N)
-  return map
-
 def get_generator_value(class_indicates, index):
     key_list = list(class_indicates.keys())
     val_list = list(class_indicates.values())
@@ -120,10 +114,8 @@ test_path = 'asar-dataset/test'
 val_path = 'asar-dataset/val'
 
 train_datagen = ImageDataGenerator()
-
 #val_datagen = ImageDataGenerator(rescale=1. / 255.)
 val_datagen = ImageDataGenerator()
-
 test_datagen = ImageDataGenerator()
 
 train_generator = train_datagen.flow_from_directory(
@@ -154,30 +146,23 @@ test_generator = test_datagen.flow_from_directory(
 
 train_generator.reset()
 y_train = train_generator.labels
-X_train = [np.array(tensorflow.image.resize(imread(train_path + '/' + file), [110,110])) for file in train_generator.filenames]
-X_train = np.array(X_train)
+X_train_files = [train_path + '/' + filename for filename in train_generator.filenames]
+
 
 val_generator.reset()
 y_val = val_generator.labels
-X_val = [np.array(tensorflow.image.resize(imread(val_path + '/' + file), [110,110])) for file in val_generator.filenames]
-X_val = np.array(X_val)
+X_val_files = [val_path + '/' + filename for filename in val_generator.filenames]
 
 test_generator.reset()
 y_test = test_generator.labels
-X_test = [np.array(tensorflow.image.resize(imread(test_path + '/' + file), [110,110])) for file in test_generator.filenames]
-X_test = np.array(X_test)
-
-print('Data has been loaded')
+X_test_files = [test_path + '/' + filename for filename in test_generator.filenames]
 
 # num_of_classes = len(train_generator.class_indices)
 test_transcripts = [get_generator_value(test_generator.class_indices, int(i)) for i in y_test]
 test_transcripts = np.array(test_transcripts)
 y_train = [phoc_generate_label(get_generator_value(train_generator.class_indices, int(i))) for i in y_train]
-y_train = np.array(y_train)
 y_val = [phoc_generate_label(get_generator_value(val_generator.class_indices, int(i))) for i in y_val]
-y_val = np.array(y_val)
 y_test = [phoc_generate_label(get_generator_value(test_generator.class_indices, int(i))) for i in y_test]
-y_test = np.array(y_test)
 
 weight_path = 'phoc_weights.pkl'
 if os.path.exists(weight_path):
@@ -186,28 +171,23 @@ else:
     model = base_model(110, 110)
 batch_size = 32
 
-map_max = 0
+train_sequence = DataSequence(imagefiles=X_train_files, labels= y_train,  batch_size=batch_size)
+valid_sequence = DataSequence(imagefiles=X_val_files, labels= y_val, batch_size=batch_size)
 
 for i in range(5):
-    history = model.fit(
-        X_train, y_train,
-        steps_per_epoch=math.ceil(train_generator.samples//batch_size),
+    model.fit(
+        train_sequence,
         batch_size=batch_size,
         epochs=5,
         shuffle= True,
-        validation_data=(X_val, y_val),
-        validation_steps=math.ceil(val_generator.samples//batch_size),
+        validation_data=valid_sequence,
         verbose=1)
 
-    map_value = map(model, X_test, y_test, test_transcripts) # Calculates the MAP of the model
-    # save the model
-    if map_value > map_max:
-        map_max = map_value
-        weights = model.get_weights()
-        df = pd.DataFrame(weights)
-        print("Saving the best model.......")
-        model.save('phoc-model.h5')
-        df.to_pickle('phoc_weights.pkl')
+    weights = model.get_weights()
+    df = pd.DataFrame(weights)
+    print("Saving the best model.......")
+    model.save('phoc-model.h5')
+    df.to_pickle('phoc_weights.pkl')
 #
 # # Create directory to store training history
 #
