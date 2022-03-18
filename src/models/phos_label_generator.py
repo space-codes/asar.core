@@ -7,7 +7,7 @@ import numpy as np
 # Output: Number of shapes/columns
 
 def get_number_of_columns(csv_file):
-    with open(csv_file, encoding='UTF-8') as file:
+    with open(csv_file, encoding='UTF-8-sig') as file:
         reader = csv.reader(file, delimiter=',', skipinitialspace=True)
         return len(next(reader))-1
 
@@ -18,7 +18,7 @@ def get_number_of_columns(csv_file):
 def create_alphabet_dictionary(csv_file):
     alphabet_dict = dict()
 
-    with open(csv_file, encoding='UTF-8') as file:
+    with open(csv_file, encoding='UTF-8-sig') as file:
         reader = csv.reader(file, delimiter=',', skipinitialspace=True)
 
         for index, line in enumerate(reader):
@@ -46,7 +46,7 @@ def word_vector(word):
 # Input: A word(string) 
 # Output: PHOS vector
 
-def generate_label(word):
+def phos_generate_label(word):
     vector = word_vector(word)
     L = len(word)
     for split in range(2, 6):
@@ -62,7 +62,7 @@ def generate_label(word):
 def gen_label(word_list):
     label={}
     for word in word_list:
-        label[word]=generate_label(word)
+        label[word]=phos_generate_label(word)
     return label
 
 
@@ -74,6 +74,6 @@ def label_maker(word_txt):
     with open(word_txt, "r") as file:
         for word_index, line in enumerate(file):
             word = line.split()[0]
-            label[word]=generate_label(word)
+            label[word]=phos_generate_label(word)
     return label
     #write_s_file(s_matrix_csv, s_matrix, word_list)

@@ -42,7 +42,7 @@ def generate_100(word):
 
   return vector_100
 
-def generate_label(word):
+def phoc_generate_label(word):
   word = word.lower()
   vector = []
   L = len(word)
