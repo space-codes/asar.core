@@ -88,7 +88,7 @@ def accuracy_test(model, X_test, transcripts, all_transcripts, name):
     # Finding predictions for test set word images
 
     for (img, transcript) in zip(X_test, transcripts):
-        x = img_to_array(load_img(img, target_size=(110, 110)))
+        x = img_to_array(load_img(img, target_size=(128, 128)))
         word = transcript
         word_count_by_len[len(word)] += 1
         x = np.expand_dims(x, axis=0)
@@ -164,7 +164,7 @@ test_transcripts = [get_generator_value(test_generator.class_indices, int(i)) fo
 X_test_files = [test_path + '/' + filename for filename in test_generator.filenames]
 MODEL = 'phoc-model'
 all_transcripts = list(train_generator.class_indices.keys())
-name = MODEL
+name = MODEL + "_1"
 
 # Create directories for storing test results and plots
 
