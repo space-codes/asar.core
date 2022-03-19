@@ -3,11 +3,15 @@ import itertools
 import numpy as np
 from numpy import linalg as LA
 import pandas as pd
+from tensorflow.keras.layers import Dense, Dropout, MaxPooling2D, Flatten, Input, Conv2D
 from tensorflow_addons.layers import SpatialPyramidPooling2D
 import tensorflow as tf
+from tensorflow.keras import backend as K
+from tensorflow.keras import Model
 from tensorflow.keras.preprocessing.image import img_to_array, load_img, ImageDataGenerator
 import matplotlib.pyplot as plt
 from phoc_label_generator import phoc_generate_label
+from phos_label_generator import phos_generate_label
 
 # Uncomment the following line and set appropriate GPU if you want to set up/assign a GPU device to run this code
 # os.environ["CUDA_VISIBLE_DEVICES"]="1"
@@ -15,9 +19,53 @@ from phoc_label_generator import phoc_generate_label
 # Input: Two vectors x and y
 # Output: Similarity index = Cosine simialirity * 1000
 
+def build_model(img_width, img_height):
+    if K.image_data_format() == 'channels_first':
+        input_shapes = (3, img_width, img_height)
+    else:
+        input_shapes = (img_width, img_height, 3)
+    inp = Input(shape=input_shapes)
+    model = Conv2D(64, (3, 3), padding='same', activation='relu')(inp)
+    model = Conv2D(64, (3, 3), padding='same', activation='relu')(model)
+    model = (MaxPooling2D(pool_size=(2, 2), strides=2))(model)
+    model = (Conv2D(128, (3, 3), padding='same', activation='relu'))(model)
+    model = (Conv2D(128, (3, 3), padding='same', activation='relu'))(model)
+    model = (MaxPooling2D(pool_size=(2, 2), strides=2))(model)
+    model = (Conv2D(256, (3, 3), padding='same', activation='relu'))(model)
+    model = (Conv2D(256, (3, 3), padding='same', activation='relu'))(model)
+    model = (Conv2D(256, (3, 3), padding='same', activation='relu'))(model)
+    model = (Conv2D(256, (3, 3), padding='same', activation='relu'))(model)
+    model = (Conv2D(256, (3, 3), padding='same', activation='relu'))(model)
+    model = (Conv2D(256, (3, 3), padding='same', activation='relu'))(model)
+    model = (Conv2D(512, (3, 3), padding='same', activation='relu'))(model)
+    model = (Conv2D(512, (3, 3), padding='same', activation='relu'))(model)
+    model = (Conv2D(512, (3, 3), padding='same', activation='relu'))(model)
+    model = (SpatialPyramidPooling2D([1, 2, 4]))(model)
+    model = (Flatten())(model)
+
+    # PHOS component
+    phosnet_op = Dense(4096, activation='relu')(model)
+    phosnet_op = Dropout(0.5)(phosnet_op)
+    phosnet_op = Dense(4096, activation='relu')(phosnet_op)
+    phosnet_op = Dropout(0.5)(phosnet_op)
+    phosnet_op = Dense(270, activation='relu', name="phosnet")(phosnet_op)
+
+    # PHOC component
+    phocnet = Dense(4096, activation='relu')(model)
+    phocnet = Dropout(0.5)(phocnet)
+    phocnet = Dense(4096, activation='relu')(phocnet)
+    phocnet = Dropout(0.5)(phocnet)
+    phocnet = Dense(830, activation='sigmoid', name="phocnet")(phocnet)
+    model = Model(inputs=inp, outputs=[phosnet_op, phocnet])
+    return model
+
 def similarity(x, y):
     return 1000 * np.dot(x, y) / (LA.norm(x) * LA.norm(y))
 
+def get_comb_label(x):
+    phos_labels=phos_generate_label(x)
+    phoc_labels=phoc_generate_label(x)
+    return np.concatenate((phos_labels,phoc_labels),axis=0)
 
 # Input: Confusion matrix, true and predicted class names, plot title, color map and normalization parameter(bool)
 # Output: Plots and saves confusion matrix
@@ -93,10 +141,12 @@ def accuracy_test(model, X_test, transcripts, all_transcripts, name):
         word_count_by_len[len(word)] += 1
         x = np.expand_dims(x, axis=0)
         print('predicting ' + transcript + '....')
-        y_pred = np.squeeze(model.predict(x))
+        y_pred=model.predict(x)
+        y_pred=np.squeeze(np.concatenate((y_pred[0],y_pred[1]),axis=1))
         mx = 0
         for k in all_transcripts:
-            temp = similarity(y_pred, phoc_generate_label(k))
+            test = get_comb_label(k)
+            temp = similarity(y_pred, test)
             if temp > mx:
                 mx = temp
                 op = k
@@ -162,20 +212,20 @@ test_generator.reset()
 y_test = test_generator.labels
 test_transcripts = [get_generator_value(test_generator.class_indices, int(i)) for i in y_test]
 X_test_files = [test_path + '/' + filename for filename in test_generator.filenames]
-MODEL = 'phoc-model'
+MODEL = 'phosc-model'
 all_transcripts = list(train_generator.class_indices.keys())
 name = MODEL
 
 # Create directories for storing test results and plots
 
-if not os.path.exists("Test_Plots"):
-    os.makedirs("Test_Plots")
-if not os.path.exists("Test_Results"):
-    os.makedirs("Test_Results")
+if not os.path.exists("PHOSC_Test_Plots"):
+    os.makedirs("PHOSC_Test_Plots")
+if not os.path.exists("PHOSC_Test_Results"):
+    os.makedirs("PHOSC_Test_Results")
 
 # Load model from filename and print model name(if successfully loaded)
-model = tf.keras.models.load_model(MODEL + ".h5")
-print(MODEL)
+model = build_model(110, 110)
+model.load_weights(MODEL + ".h5")
 
 # Function called for test set prediction and result plotting
 accuracy = accuracy_test(model, X_test_files, test_transcripts, all_transcripts, name + "_conv")
