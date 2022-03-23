@@ -2,6 +2,20 @@ import numpy as np
 import cv2
 
 
+def Resize(image):
+    h,w=image.shape[0],image.shape[1]
+    if w>1200:
+        return image
+    mn=w*20
+    factor=20
+    for i in range(1,11):
+        dif=abs(w*i-1200)
+        if dif<mn:
+            mn=dif
+            factor=i
+    image = cv2.resize(image, (w*factor,h*factor), interpolation=cv2.INTER_AREA)
+    return image
+
 # Normalization
 def Normalization(img):
     #img = cv2.equalizeHist(img)
@@ -67,16 +81,16 @@ def Filters(img):
 
 def gaus_thresh(image):
     image = cv2.GaussianBlur(image, (5, 5), 1)
-    cv2.imwrite('FinalOutput/02_gaussian.png', image)
+    #cv2.imwrite('FinalOutput/02_gaussian.png', image)
 
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    cv2.imwrite("FinalOutput/03_grey.jpg", gray)
+    #cv2.imwrite("FinalOutput/03_grey.jpg", gray)
 
     gray = np.array(255 * (gray / 255) ** 1, dtype='uint8')
-    cv2.imwrite("FinalOutput/04_greyImgGamaCorrelation.jpg", gray)
+    #cv2.imwrite("FinalOutput/04_greyImgGamaCorrelation.jpg", gray)
 
     ret, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-    cv2.imwrite('FinalOutput/05_otsus.png', thresh)
+    #cv2.imwrite('FinalOutput/05_otsus.png', thresh)
     #thresh = add_padding(thresh)
     # cnts = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     # cnts = cnts[0] if len(cnts) == 2 else cnts[1]
