@@ -83,7 +83,7 @@ def base_model(img_width, img_height, weight_path=None):
     model.add(Dropout(0.5))
     model.add(Dense(4096, activation='relu'))
     model.add(Dropout(0.5))
-    model.add(Dense(830, activation='sigmoid'))
+    model.add(Dense(730, activation='sigmoid'))
     from tensorflow.keras.optimizers import SGD, Adam, Adadelta
 
     loss = losses.binary_crossentropy
