@@ -50,14 +50,15 @@ def letter_seg(src_img, i):
             start = end
         end = letter[e][0] + letter[e][2]
         letter_index -= 1
+        h1 = 0
+        if letter[e][1] - 50 > 0:
+            h1 = letter[e][1] - 50
         h2 = height - 1
-        if h2 > h + 50:
-            h2 = h + 50
-        letter_img_tmp = src_img[0:h2, start:end]
+        if h2 > letter[e][3] + letter[e][1] + 50:
+            h2 = letter[e][3] + letter[e][1] + 50
+        letter_img_tmp = src_img[h1:h2, start:end]
 
         cv2.imwrite('segmented_data/' + str(i) + '_' + str(letter_index) + '.jpg', letter_img_tmp)
-
-
 
 # img = cv2.imread('lines/_2.png', 1)
 #
