@@ -3,7 +3,7 @@ from VPP_Character_segmentation import segment
 from preprocessing import morphological_operation,gaus_thresh
 from word_segmentation_with_contour import letter_seg
 import os
-image = cv2.imread('3.png')
+image = cv2.imread('image.png')
 
 imgcpy1 = image.copy()
 imgcpy2 = image.copy()
