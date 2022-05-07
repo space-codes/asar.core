@@ -16,89 +16,12 @@ def Resize(image):
     image = cv2.resize(image, (w*factor,h*factor), interpolation=cv2.INTER_AREA)
     return image
 
-# Normalization
-def Normalization(img):
-    #img = cv2.equalizeHist(img)
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
-    cl_image = clahe.apply(img)
-    return cl_image
-
-# binarization
-def binary_thresholding(img):
-    # Values below 127 goes to 0 (black, everything above goes to 255 (white)
-    ret,binary_th = cv2.threshold(img,200, 255, cv2.THRESH_BINARY)
-    return binary_th
-
-def adaptive_thresholding(img):
-    # It's good practice to blur images as it removes noise
-    #img = cv2.GaussianBlur(img, (3, 3), 0)
-    adaptive_th=cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,51,30)
-    return adaptive_th
-
-# Median Filtering Logic
-def median_subtract(img, ksize=23):
-    background=cv2.medianBlur(img, ksize)
-    result=cv2.subtract(background, img)
-    result=cv2.bitwise_not(result)
-    return (result, background)
-
-# Morphological operation
-def edge_detection_dilation_erosion(img):
-    edges=cv2.Canny(img, 100, 100)
-    edges=cv2.bitwise_not(edges)
-    kernel = np.ones((3,3),np.uint8)
-    dilation = cv2.dilate(cv2.bitwise_not(edges),kernel,iterations = 1)
-    dilation=cv2.bitwise_not(dilation)
-    kernel1 = np.ones((9,9),np.uint8)
-    erosion=cv2.erode(cv2.bitwise_not(img), kernel1,iterations=1)
-    erosion=cv2.bitwise_not(erosion)
-    return (edges, dilation, erosion)
-
-def Filters(img):
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # cv2.imshow('gray', img)
-    # cv2.waitKey(0)
-    # Normalization
-    # img=preprocessing.Normalization(img)
-    # cv2.imshow('Equalized', img)
-    # cv2.waitKey(0)
-
-    #adaptive_thresholding
-    result =adaptive_thresholding(img)
-    # cv2.imshow('adaptive_thresholding', result)
-    # cv2.waitKey(0)
-
-    # Peform median filtering over dirty image
-    #result, background = median_subtract(result)
-    #cv2.imshow('median_subtract', result)
-    #cv2.waitKey(0)
-
-    #   binary_thresholding
-    #result = binary_thresholding(img)
-    #cv2.imshow('binary_thresholding', result)
-    #cv2.waitKey(0)
-    return result
 
 def gaus_thresh(image):
     image = cv2.GaussianBlur(image, (5, 5), 1)
-    #cv2.imwrite('FinalOutput/02_gaussian.png', image)
-
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    #cv2.imwrite("FinalOutput/03_grey.jpg", gray)
-
     gray = np.array(255 * (gray / 255) ** 1, dtype='uint8')
-    #cv2.imwrite("FinalOutput/04_greyImgGamaCorrelation.jpg", gray)
-
     ret, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-    #cv2.imwrite('FinalOutput/05_otsus.png', thresh)
-    #thresh = add_padding(thresh)
-    # cnts = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    # cnts = cnts[0] if len(cnts) == 2 else cnts[1]
-    # for c in cnts:
-    #     area = cv2.contourArea(c)
-    #     if area < 400:
-    #         cv2.drawContours(thresh, [c], -1, (0, 0, 0), -1)
-    # cv2.imwrite('FinalOutput/06_nonoise.png', thresh)
     return thresh
 
 def iteration(image: np.ndarray, value: int) -> np.ndarray:
@@ -157,30 +80,42 @@ def rlsa(image: np.ndarray, horizontal: bool = True, vertical: bool = True, valu
 def morphological_operation(thresh):
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (20, 5))
     line_img = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel, iterations=2)
+
     close_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (35, 1))
     close = cv2.morphologyEx(line_img, cv2.MORPH_CLOSE, close_kernel, iterations=3)
-    #cv2.imwrite('FinalOutput/07_lineIMG.png', close)
 
     kernel = np.ones((1, 60), np.uint8)
     close = cv2.erode(close, kernel, iterations=3)
-    #cv2.imwrite('FinalOutput/08_erosion.png', close)
 
     blur = cv2.blur(close, (99, 1), 0)
-    #cv2.imwrite('FinalOutput/09_blureImg.tif', blur)
 
     _, imgPart = cv2.threshold(blur, 1, 255, cv2.THRESH_BINARY)
-    #cv2.imwrite('FinalOutput/10_imgPage.png', imgPart)
 
     image_rlsa_horizontal = rlsa(imgPart, True, False, 20)
-    #cv2.imwrite('FinalOutput/18_rlsa.png', image_rlsa_horizontal)
 
     close_kernel1 = cv2.getStructuringElement(cv2.MORPH_RECT, (35, 1))
-    #close1 = cv2.morphologyEx(image_rlsa_horizontal, cv2.MORPH_CLOSE, close_kernel1, iterations=3)
-    kernel1 = np.ones((1, 25), np.uint8)
-    #close1 = cv2.erode(close1, kernel1, iterations=4)
-    #cv2.imwrite('FinalOutput/19_close1.png', close1)
-    # opening = cv2.morphologyEx(close1, cv2.MORPH_OPEN, np.ones((1,10), np.uint8))
-    # cv2.imwrite('FinalOutput/close11.png',opening)
+
     dilation = cv2.dilate(image_rlsa_horizontal, close_kernel1, iterations=8)
-    #cv2.imwrite('FinalOutput/20_close111.png', dilation)
+
     return dilation
+
+
+def remove_dots(img):
+    height = img.shape[0]
+    width = img.shape[1]
+
+    ret, labels, stats, centroids = cv2.connectedComponentsWithStats(
+        img.astype(np.uint8), connectivity=8)
+
+    new_img = np.zeros_like(img)
+
+    for i in range(1, ret):
+        cc_width = stats[i, cv2.CC_STAT_WIDTH]
+        cc_height = stats[i, cv2.CC_STAT_HEIGHT]
+        y=int(centroids[i][1])
+        if ( y > 0.3*height and y < 0.7*height and cc_height >= 0.15 * height)or\
+                (cc_height >= 0.3 * height )or\
+                (cc_height >= 0.2 * height and y > 0.3*height):
+          new_img[labels == i] = 255
+
+    return new_img
