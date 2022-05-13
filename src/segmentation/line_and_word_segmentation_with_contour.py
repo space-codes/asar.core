@@ -10,7 +10,10 @@ def word_segmentation_from_left_to_right(src_img, i):
     # preprocessing for word segmentation
     grey_img = cv2.cvtColor(src_img, cv2.COLOR_BGR2GRAY)
     ret, bin_img = cv2.threshold(grey_img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-    final_thr = remove_dots(bin_img)
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+    final_thr = cv2.morphologyEx(bin_img, cv2.MORPH_CLOSE, kernel)
+    final_thr = remove_dots(final_thr)
+    final_thr = cv2.convertScaleAbs(final_thr, alpha=(255.0))
 
     # finding words contours
     letter_k = []
