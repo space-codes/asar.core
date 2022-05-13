@@ -9,7 +9,7 @@ def word_segmentation_from_left_to_right(src_img, i):
 
     # preprocessing for word segmentation
     grey_img = cv2.cvtColor(src_img, cv2.COLOR_BGR2GRAY)
-    bin_img = cv2.adaptiveThreshold(grey_img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 21, 20)
+    ret, bin_img = cv2.threshold(grey_img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
     final_thr = remove_dots(bin_img)
 
     # finding words contours
