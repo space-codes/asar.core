@@ -113,9 +113,9 @@ def remove_dots(img):
         cc_width = stats[i, cv2.CC_STAT_WIDTH]
         cc_height = stats[i, cv2.CC_STAT_HEIGHT]
         y=int(centroids[i][1])
-        if ( y > 0.3*height and y < 0.7*height and cc_height >= 0.15 * height)or\
-                (cc_height >= 0.3 * height )or\
-                (cc_height >= 0.2 * height and y > 0.3*height):
+        if (y > 0.35 * height and y < 0.8 * height and cc_height >= 0.20 * height) or \
+                (cc_height >= 0.4 * height) or \
+                (cc_height >= 0.3 * height and y > 0.35 * height):
           new_img[labels == i] = 255
 
     return new_img
