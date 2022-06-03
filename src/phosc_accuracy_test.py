@@ -48,14 +48,14 @@ def build_model(img_width, img_height):
     phosnet_op = Dropout(0.5)(phosnet_op)
     phosnet_op = Dense(4096, activation='relu')(phosnet_op)
     phosnet_op = Dropout(0.5)(phosnet_op)
-    phosnet_op = Dense(270, activation='relu', name="phosnet")(phosnet_op)
+    phosnet_op = Dense(180, activation='relu', name="phosnet")(phosnet_op)
 
     # PHOC component
     phocnet = Dense(4096, activation='relu')(model)
     phocnet = Dropout(0.5)(phocnet)
     phocnet = Dense(4096, activation='relu')(phocnet)
     phocnet = Dropout(0.5)(phocnet)
-    phocnet = Dense(830, activation='sigmoid', name="phocnet")(phocnet)
+    phocnet = Dense(505, activation='sigmoid', name="phocnet")(phocnet)
     model = Model(inputs=inp, outputs=[phosnet_op, phocnet])
     return model
 
@@ -136,7 +136,7 @@ def accuracy_test(model, X_test, transcripts, all_transcripts, name):
     # Finding predictions for test set word images
 
     for (img, transcript) in zip(X_test, transcripts):
-        x = img_to_array(load_img(img, target_size=(110, 110)))
+        x = img_to_array(load_img(img, target_size=(70, 90)))
         word = transcript
         word_count_by_len[len(word)] += 1
         x = np.expand_dims(x, axis=0)
@@ -224,7 +224,7 @@ if not os.path.exists("PHOSC_Test_Results"):
     os.makedirs("PHOSC_Test_Results")
 
 # Load model from filename and print model name(if successfully loaded)
-model = build_model(110, 110)
+model = build_model(70, 90)
 model.load_weights(MODEL + ".h5")
 
 # Function called for test set prediction and result plotting

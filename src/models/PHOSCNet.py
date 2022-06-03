@@ -92,13 +92,13 @@ def base_model(img_width, img_height, weight_path=None):
     phosnet_op = Dropout(0.5)(phosnet_op)
     phosnet_op = Dense(4096, activation='relu')(phosnet_op)
     phosnet_op = Dropout(0.5)(phosnet_op)
-    phosnet_op = Dense(270, activation='relu', name="phosnet")(phosnet_op)
+    phosnet_op = Dense(180, activation='relu', name="phosnet")(phosnet_op)
 
     phocnet = Dense(4096, activation='relu')(model)
     phocnet = Dropout(0.5)(phocnet)
     phocnet = Dense(4096, activation='relu')(phocnet)
     phocnet = Dropout(0.5)(phocnet)
-    phocnet = Dense(730, activation='sigmoid', name="phocnet")(phocnet)
+    phocnet = Dense(505, activation='sigmoid', name="phocnet")(phocnet)
 
     model = Model(inputs=inp, outputs=[phosnet_op, phocnet])
     losses = {
@@ -195,9 +195,9 @@ y_test_phos_labels = [phos_generate_label(get_generator_value(test_generator.cla
 
 weight_path = 'phosc_weights.pkl'
 if os.path.exists(weight_path):
-    model = base_model(110, 110, weight_path= weight_path)
+    model = base_model(70, 90, weight_path= weight_path)
 else:
-    model = base_model(110, 110)
+    model = base_model(70, 90)
 batch_size = 32
 
 train_sequence = DataSequence(imagefiles=X_train_files, phoclabels= y_train_phoc_labels, phoslabels=y_train_phos_labels, batch_size=batch_size)
