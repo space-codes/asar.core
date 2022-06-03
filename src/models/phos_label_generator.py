@@ -49,7 +49,7 @@ def word_vector(word):
 def phos_generate_label(word):
     vector = word_vector(word)
     L = len(word)
-    for split in range(2, 6):
+    for split in range(2, 5):
         parts = L//split
         for mul in range(split-1):
             vector=np.concatenate((vector,word_vector(word[mul*parts:mul*parts+parts])),axis=0)

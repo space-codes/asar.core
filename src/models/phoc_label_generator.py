@@ -4,6 +4,7 @@ vector of length 3784.
 ((2 + 3 + 4 + 5) * languageCharactersAndNumbersCount) + (2*commonBigram)
 ((2+3+4+5) * 256) + (2*100) = 3784
 ((2+3+4+5) * 45) + (2*50) = 730
+((2+3+4) * 45) + (2*50) = 505
 Reference: https://ieeexplore.ieee.org/document/6857995/?part=1
 '''
 
@@ -42,7 +43,7 @@ def phoc_generate_label(word):
   word = word.lower()
   vector = []
   L = len(word)
-  for split in range(2, 6):
+  for split in range(2, 5):
     parts = L//split
     for mul in range(split-1):
       vector += generate_45(word[mul*parts:mul*parts+parts])

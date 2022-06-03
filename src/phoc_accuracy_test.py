@@ -88,7 +88,7 @@ def accuracy_test(model, X_test, transcripts, all_transcripts, name):
     # Finding predictions for test set word images
 
     for (img, transcript) in zip(X_test, transcripts):
-        x = img_to_array(load_img(img, target_size=(110, 110)))
+        x = img_to_array(load_img(img, target_size=(70, 90)))
         word = transcript
         word_count_by_len[len(word)] += 1
         x = np.expand_dims(x, axis=0)
