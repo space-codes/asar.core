@@ -1,0 +1,167 @@
+\pagenumbering{roman}
+\pagecolor{gpCoverBGColor}\afterpage{\nopagecolor}
+\thispagestyle{empty}
+{\color{gpCoverTextColor}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c p{0.5\textwidth} c}
+    \includegraphics[width=1.09in]{images/BSU-logo.png}
+    &
+    &
+    \includegraphics[width=1.09in]{images/FCAI-logo.png}
+    \end{tabular}
+\end{table}
+
+\begin{center}
+    \vspace{10pt}
+    {\fontsize{32}{50} \selectfont \textbf{\gpProject{}}}
+    \vspace{15pt}
+    
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\linewidth]{images/logo.png}
+    \label{fig:logo}
+    \end{figure}
+
+    \vspace{10pt}
+    \textbf{A Graduation Project Report Submitted}
+    \vspace{3pt}\\
+    to
+    \vspace{3pt}\\
+    \textbf{Faculty of Computers and Artificial Intelligence, Beni Suef University} 
+    \vspace{3pt}\\
+    \textbf{in partial fulfillment of the requirements of the degree}
+    \vspace{3pt}\\
+    of
+    \vspace{3pt}\\
+    \textbf{Bachelor of Science in Computer Engineering}
+    \vspace{10pt}
+    
+    \vspace{15pt}
+    {\Large \textbf{Presented by}}\\
+    \begin{center}
+    \begin{tabular}{ l c r }
+     \textbf{\gpStudentFirst} & \hspace{50pt} & \textbf{\gpStudentSecond} \\
+     \textbf{\gpStudentThird} & \hspace{50pt} & \textbf{\gpStudentFourth}
+    \end{tabular}
+    \end{center}
+    
+    \vspace{8pt}
+    {\Large \textbf{Supervised by}}\\
+    \vspace{5pt}
+    \textbf{\gpSupervisor}
+    
+    \vspace{15pt}
+    \textbf{\gpDate{}}
+    
+    \vspace{10pt}
+    All rights reserved. This report may not be reproduced in whole or in part, by photocopying or other means, without the permission of the authors/department.    
+\end{center}
+\newpage
+}
+
+\section*{Abstract}
+\label{sec:abstract}
+\addcontentsline{toc}{section}{\nameref{sec:abstract}}
+
+% The abstract should clearly and briefly describe the project objective(s) and outcome(s). In details, the abstract should include, but not limited to, all of the following:
+%     \begin{itemize}
+%         \item The problem(s) which is(are) addressed in the project
+%         \item The objective(s) of the project
+%         \item The approach that is followed to solve the problem
+%         \item The output(s) of the project
+%         \item Testing/development tools and summary of testing results
+%         \item The sponsor(s), if any
+%     \end{itemize}
+
+Historical Arabic manuscripts documents have a lot of valuable information in many sciences like Islamic sciences, Arabic grammar, math, and medical studies. Since the manuscripts were the main tool for storing any information before the age of printed papers, which is a long period with many valuable data missing especially here in the Arab area nobody can make use of it and doesn't be opened or discovered to the world. \\
+
+
+\noindent
+\acrfull{asar} is an intelligent system to analyze and recognize historical Arabic manuscripts. Given manuscript images which will be handled by the system to extract the corresponding transcripts into digital texts. \\ 
+
+\noindent
+Our system is built using a hybrid deep learning model \acrfull{phosc} based on \acrfull{cnn} model for recognizing the Arabic manuscripts which are trained based on the benchmark VML-HD dataset. A morphological operation is done for the segmentation of incoming images to extract the lines and the words and then embedded them into the model to generate the digital text of Arabic manuscripts. The first version of ASAR has been successfully implemented and tested. Results are promising and competitive to similar projects.
+
+\newpage
+
+\begin{arabtext}
+{\huge
+المُلَخَّص
+}\vspace{20pt}
+المخطوطات العربية القديمة تحتوي كما هائلا من المعلومات ذات القيمة العظيمة والتي كانت أساسا لأغلب العلوم الحديثة وقواعد ومبادئ متينة وقوية لعلوم الشريعة الإسلامية واللغة العربية والرياضيات والب وغيرها، فقد كانت المخطوات هي الوسيلة المتاحة في عصور كثيرة لتقييد العلم ونقله بين الناس قبل ظهور المطبوعات التي بين أيدينا الآن، فلابد لإنسان هذا العصر من النظر في علوم وتراث العصور الفائتة للتعرف عليها وفهمها والاستفادة منها.
+
+\vspace{\baselineskip}
+
+أثار هو نظام حوسبي يعمل بالذكاء الإصطناعي ويهدف للتعرف على المخطوطات وتحليلها حيث يتم إمداده بصور المخطوطة العربية وهو يقوم باستخراج النصوص التي تحتويها المخطوطة في صورة نصوص رقمية يمكن استخدامها رقميا في الطباعة أو غيرها.
+
+\vspace{\baselineskip}
+
+أنشأنا النظام باستخدام أحد نماذج التعلم العميق وهو نموذج مختلط  للتعرف على المخطوطات التي تم تدريبه عليها والموجودة في قاعدة بيانات معيارية حصلنا عليها وقمنا بتجهيزها للعمل حيث يقوم النظام بتجزئة الصور التي تم إدخالها له تجزئة على مستوى السطور والكلمات ثم يقوم بإدخالها للنموذج ليتعرف عليها ويستخرج منها النصوص التي تحتويِها .
+
+ تم إنشاء الإصدار الأول وإختباره بنجاح والنتائج جيدة نسبيا .
+\end{arabtext}
+\newpage
+
+\section*{Acknowledgment}
+\addcontentsline{toc}{section}{Acknowledgment}
+\quad Our gratitude to those who helped us cannot be put in words. First, we would like to express our appreciation and thankfulness to our supervisor, \textbf{Dr. Mohamed Kayed}, for his utmost care and support for us during our work. His guidance and mentorship have been critical to our success. \\
+
+We would also like to thank our family, friends and colleagues, who have always been there to support us and push us forward. We are defined by the people who surround us, and those people made us who we are today.
+\newpage
+
+\tableofcontents
+\addcontentsline{toc}{section}{\contentsname}
+
+\listoffigures
+\addcontentsline{toc}{section}{List of Figures}
+
+\listoftables
+\addcontentsline{toc}{section}{List of Tables}
+
+\clearpage
+
+\printglossary[type=\acronymtype,title=List of Abbreviations]
+
+\clearpage
+
+\section*{Contacts}
+\label{sec:contacts}
+\addcontentsline{toc}{section}{\nameref{sec:contacts}}
+
+\subsubsection*{\centering Team Members}
+\rowcolors{2}{gray!25}{white}
+{
+\centering
+\begin{tabular}{|l | l | l|}
+\rowcolor{gray!50}
+    \hline
+    Name & Email & Phone Number\\\hline\hline
+    \gpStudentFirst & \gpStudentFirstEmail & \gpStudentFirstMobile\\\hline
+    \gpStudentSecond & \gpStudentSecondEmail & \gpStudentSecondMobile\\\hline
+    \gpStudentThird & \gpStudentThirdEmail & \gpStudentThirdMobile\\\hline
+    \gpStudentFourth & \gpStudentFourthEmail & \gpStudentFourthMobile\\\hline
+\end{tabular}
+}
+
+\subsubsection*{\centering Supervisor}
+\rowcolors{2}{gray!25}{white}
+\begin{center}
+\begin{tabular}{|l | l | l|}
+\rowcolor{gray!50}
+    \hline
+    Name & Email & Phone Number\\\hline\hline
+    \gpSupervisor & \gpSupervisorEmail & \gpSupervisorMobile\\\hline
+\end{tabular}
+\end{center}
+
+\clearpage
+\vspace*{\fill}
+\begin{center}
+\begin{minipage}{.45\textwidth}
+This page is intentionally left blank
+\end{minipage}
+\end{center}
+\vfill % equivalent to \vspace{\fill}
+\clearpage
