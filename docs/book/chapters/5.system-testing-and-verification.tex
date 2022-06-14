@@ -3,11 +3,11 @@
 
 This chapter introduces you to the testing setup and how we tested each module in isolation and the end-to-end integration that we planned and followed to prove to a high certainty the correctness of the system. \\
 
-Testing of the project is done to check whether the actual results match what is expected, and ensure that each module is doing what it is intended to do, and to ensure that the system as a whole is working correctly. Our project depends on real world manuscript document image, so, most of our testing was done through testing the modules on different images, and checking whether the output is satisfactory compared to the results of similar projects. In the end, we test the workflow of the project to check whether the results are clear enough to interpret or not.
+Testing of the project is done to check whether the actual results match what is expected, ensure that each module is doing what it is intended to do, and to ensure that the system as a whole is working correctly. Our project depends on real world manuscript document images, so, most of our testing was done through testing the modules on different images, and checking whether the output is satisfactory compared to the results of similar projects. In the end, we test the workflow of the project to check whether the results are clear enough to interpret or not.
 
 \section{Testing Setup}
 \subsection{Setup Web Server}
-Since the web server is build using Flask to accelerate the development of web application and the \acrfull{api}, we will install the flask framework and other libraries that depends on it in this section. Also we will setup machine learning environment for predicting the manuscript image.
+Since the web server is built using Flask to accelerate the development of the web application and the \acrfull{api}, we will install the flask framework and other libraries that depend on it in this section. Also, we will set up a machine learning environment for predicting the manuscript image.
 
 \subsubsection{Installing Required Libraries}
 Run the following:
@@ -41,7 +41,7 @@ $ pip install -r requirements.txt
 \end{verbatim}
 
 \subsubsection{Start Script}
-After installing all required libraries, run the following script to start flask app to start web application and the API.
+After installing all required libraries, run the following script to start flask app to start the web application and the API.
 
 \begin{verbatim}
 $ python -m flask run
@@ -51,7 +51,7 @@ $ python -m flask run
 The mobile application is built using the great flutter framework launched by Google which gives us the flexibility to create applications that work on Android and iOS operating systems.
 In this section, we will explain the steps that we will follow to download and install the packages and run the application.
 \subsubsection{Installing Required Libraries}
-To install the packages needed to run the application, we go to the pubspec.yaml file located in the root of the application filesand make sure that the following packages are correctly present:
+To install the packages needed to run the application, we go to the pubspec.yaml file located in the root of the application files and make sure that the following packages are correctly present:
 \begin{verbatim}
 cupertino_icons: ^1.0.2
 provider: ^6.0.3
@@ -70,7 +70,7 @@ $ flutter pub get
 \end{verbatim}
 
 \subsubsection{Start Script}
-After installing all required libraries, run the following command in the terminal to start flutter app.
+After installing all required libraries, run the following command in the terminal to start the flutter app.
 
 \begin{verbatim}
 $ flutter run lib/main.dart
@@ -80,7 +80,7 @@ $ flutter run lib/main.dart
 Our main goal in evaluating each module in ASAR was to make sure it met all functional and non-functional requirements that were specified earlier. Testing is almost as challenging as development.
 
 \subsection{Module Testing}
-We follow a separate module testing to test ASAR. For each module, we take the output of previous module and test the output resulted form the module. We take one sample image shown in figure \ref{fig:real-world-sample} to forward test each module on it separately.
+We follow a separate module testing to test ASAR. For each module, we take the output of the previous module and test the output resulting from the module. We take one sample image shown in figure \ref{fig:real-world-sample} to forward test each module on it separately.
 
 \begin{figure}[H]
     \centering
@@ -91,8 +91,7 @@ We follow a separate module testing to test ASAR. For each module, we take the o
 
 \subsubsection{Line Segmentation Testing}
 
-We implemented this module using computer vision preprocessing techniques explain in details in chapter 3. The line segmentation is done by applied some preprocessing in order to prepare it for morphological operations like Gray scale, Binary thresholding, Gaussian blur, and Gaussian thresholding. Then, morphological operators like erosion, dilation, opening and closing are applied and shown in figure
-\ref{fig:line_segmentation}.
+We implemented this module using computer vision preprocessing techniques explain in detail in chapter 3. The line segmentation is done by applying some preprocessing in order to prepare it for morphological operations like Gray scale, Binary thresholding, Gaussian blur, and Gaussian thresholding. Then, morphological operators like erosion, dilation, opening, and closing are applied and shown in figure \ref{fig:line_segmentation}.
 
 \begin{figure}[H]
      \centering%
@@ -150,7 +149,9 @@ We implemented this module using computer vision preprocessing techniques explai
 \end{figure}
 
 
-After preparing the image by morphological operations, then, contours are drawn based on dilation and threshold to select the largest contours area as a separately line from the image. Figure \ref{fig:line-segmentation-results} shows the result lines based on contours area.
+After preparing the image by morphological operations, then, contours are drawn based on dilation and threshold to select the largest contours area as a separate line from the image. Figure \ref{fig:line-segmentation-results} shows the result lines based on contours area.
+
+\clearpage
 
 \begin{figure}[H]
      \centering%
@@ -273,7 +274,7 @@ After preparing the image by morphological operations, then, contours are drawn 
 
 
 \subsubsection{Word Segmentation Testing}
-We implemented this module using computer vision preprocessing and find contours techniques explain in details in chapter 3.The word segmentation is done by applied some preprocessing such as Gray-Scale, Thresholding and Remove dots on each individual line that extracted from a lines segmentation step in order to prepare it for Finding Contours technique and shown in figure.
+We implemented this module using computer vision preprocessing and find contours techniques explain in detail in chapter 3. The word segmentation is done by applying some preprocessing such as gray-Scale, thresholding, and removing dots on each individual line that is extracted from a lines segmentation step in order to prepare it for finding contours technique as shown in figure \ref{fig:pre-word_segmentation}.
 \begin{figure}[H]
      \centering%
      \begin{subfigure}[b]{0.3\textwidth}
@@ -297,11 +298,11 @@ We implemented this module using computer vision preprocessing and find contours
          \label{fig:test_Removing-Dots}
      \end{subfigure}
 
-        \caption{preprocessing After Word Segmentation.}
+        \caption{Preprocessing after word segmentation.}
         \label{fig:pre-word_segmentation}
 \end{figure}
 
-After preparing all lines by some preprocessing, then contours are drawn on each individual line and cropped all these contours to extract all sub-words from each line.Figure  shows the result sub-words for all lines.
+After preparing all lines by some preprocessing, then contours are drawn on each individual line and cropped all these contours to extract all sub-words from each line.The figure  shows the result sub-words for all lines.
 \begin{figure}[H]
      \centering%
      \begin{subfigure}[b]{0.3\textwidth}
@@ -417,23 +418,23 @@ After preparing all lines by some preprocessing, then contours are drawn on each
          \includegraphics[width=\textwidth]{images/word-seg/line-19.png}
          \caption{Sub-words of Line 19}
      \end{subfigure}
-    \caption{Output of word segmentation module.}
+    \caption{The output of word segmentation module.}
     \label{fig:line-segmentation-results}
 \end{figure}
-fig
-\subsubsection{Model Testing}
-The PHOSC model takes a lot of time for training, depending the capacity of the GPU and its edition. We have used azure cloud service with compute consist of a K-Tesla GPU with memory size 56GB and 380GB disk storage in the training and testing. Since this machine is costly, we did training the model with 50 epochs with average of 3 days on the specific GPU. \\
 
-After training the model on 187,913 samples, we evaluated them on a separate test of manuscript images. The summary of our results is presented as follows. Figure \ref{fig:training-graphs} showing the training process of our model which choose cosine similarity as performance metric to measure how well the classifier performs against the training and validation data.
+\subsubsection{Model Testing}
+The PHOSC model takes a lot of time for training, depending on the capacity of the GPU and its edition. We have used azure cloud service with compute consisting of a K-Tesla GPU with memory size 56GB and 380GB disk storage in the training and testing. Since this machine is costly, we did training the model with 50 epochs with an average of 3 days on the specific GPU. \\
+
+After training the model on 187,913 samples, we evaluated them on a separate test of manuscript images. The summary of our results is presented as follows. Figure \ref{fig:training-graphs} showing the training process of our model which chooses cosine similarity as a performance metric to measure how well the classifier performs against the training and validation data.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=15cm]{images/training-graphs.png}
-    \caption{Training graphs showing the cosine similarity and loss against number of epochs}
+    \includegraphics[width=14cm]{images/training-graphs.png}
+    \caption{Training graphs showing the cosine similarity and loss against the number of epochs}
     \label{fig:training-graphs}
 \end{figure}
 
-For testing, Figure \ref{fig:confusion-matrix} presents the confusion matrix for predictions on our test set (15,592 samples). The confusion matrix has been computed between words of different lengths to uncover any biases of the model (if any). It is difficult to visualize the class specific confusion matrix as there are over 5,429 word labels with very few (often only 1) images per word label. The length of the predicted word labels is mostly within a range of the length of the true word label. In general, the model is not biased towards words of any specific length. The high values along the diagonal indicates that the model is often predicting the word of the correct length.
+For testing, Figure \ref{fig:confusion-matrix} presents the confusion matrix for predictions on our test set (15,592 samples). The confusion matrix has been computed between words of different lengths to uncover any biases of the model (if any). It is difficult to visualize the class specific confusion matrix as there are over 5,429 word labels with very few (often only 1) image per word label. The length of the predicted word labels is mostly within a range of the length of the true word label. In general, the model is not biased towards words of any specific length. The high values along the diagonal indicate that the model is often predicting the word of the correct length.
 
 \begin{figure}[H]
     \centering
@@ -452,4 +453,11 @@ Figure \ref{fig:test-accuracy} showing the accuracy based on corrected predictio
 \end{figure}
 
 \subsection{Integration Testing}
-After merging all our modules together and testing the whole project integrated, we noticed that the final results are highly dependent on three things. First is the image quality and if the images are not clear and taken with a bad camera which effect on the correct predictions. Second is the segmentation accuracy with highly Arabic connected multiple words with each which the model is not accurate to deal with multiple words which the results too are not the best. Third thing is the hardware and amount of dataset are limited to train the PHOSC model in order to fit in all Arabic manuscripts challenges. A fast GPU with large memory size would be of a huge advantage.
+After merging all our modules together and testing the whole project integrated (a demo of overall testing is shown in figure \ref{fig:demo}), we noticed that the final results are highly dependent on three things. First is the image quality and if the images are not clear and taken with a bad camera it affects the correct predictions. Second is the segmentation accuracy with highly Arabic connected multiple words with each which the model is not accurate to deal with multiple words which the results are not the best. The third thing is the hardware and amount of dataset are limited to train the PHOSC model in order to fit in all Arabic manuscripts challenges. A fast GPU with a large memory size would be a huge advantage.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{images/demo.png}
+    \caption{Integration testing demo}
+    \label{fig:demo}
+\end{figure}
