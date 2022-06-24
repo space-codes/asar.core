@@ -8,13 +8,15 @@ During the development and implementation of our project, we made sure the proje
 \noindent 
 The overall system could be broken down to mainly 4 components:
 \begin{itemize}[itemsep=1pt, topsep=5pt]
-    \item \textbf{Page segmentation}: Computer vision techniques to prepare unseen handwritten image pages to be extracted into lines and words.
-    \item \textbf{Model development}: End-to-end deep learning network used to predict and recognize unseen segmented manuscript images.
-    \item \textbf{Applications development}: Web and mobile applications developed and integrated with deep learning networks as user-friendly services. 
-    \item \textbf{Testing}: Set of scripts, programs, and \acrfull{gui} for system testing and development. 
+    \item \textbf{Page segmentation}: \\Computer vision techniques to prepare unseen handwritten image pages to be extracted into lines and words.
+    \item \textbf{Model development}:\\ End-to-end deep learning network used to predict and recognize unseen segmented manuscript images.
+    \item \textbf{Applications development}:\\ Web and mobile applications developed and integrated with deep learning networks as user-friendly services. 
+    \item \textbf{Testing}:\\ Set of scripts, programs, and \acrfull{gui} for system testing and development. 
 \end{itemize}
 
 This chapter discusses the first 2 modules, while the applications development and testing are discussed in chapters \ref{ch:system-development} and \ref{ch:system-testing}, because it's not part of the final deployed system, but rather built for testing and development purposes.
+
+\clearpage
 
 \section{Overview and Assumptions}
 \acrshort{asar} project consists of 3 main modules that need to be completely understood before starting implementing such a thing. These three are line segmentation, word segmentation, and pattern recognition. Apart from that, there is the connection between each module and the other, the research and modularity that needs to be considered. Each of these modules is described in detail in the following section, and how they all connect to each other, and how they represent the system architecture. \\
@@ -47,17 +49,16 @@ The system's main modules can be explained in this flow:
 \end{itemize}
 
 \noindent
-In image preprocessing, we will prepare the manuscript image to be passed into the next module by applying some morphological operations such as normalization, adaptive thresholding, and median subtraction. After the image is preprocessed, we will extract each line segment by using the contours of the image, then we will take the largest contours area as segmented lines. The output of these lines will go into a vertical projection algorithm to extract each word in this which has the lowest histogram to separate between words. \\
+In image preprocessing, we will prepare the manuscript image to be passed into the next module by applying some morphological operations such as normalization, adaptive thresholding, and median subtraction. After the image is preprocessed, we will extract each line segment by using the contours of the image, then we will take the largest contours area as segmented lines. The output of these lines will go into some another morphological operations to extract each word in this which has the lowest histogram to separate between words. \\
 
 \noindent
 After each word is extracted from the manuscript image, it will be embedded into the trained model to analyze and predict the corresponding transcript. Model development, image preprocessing, line, and word segmentation are explained in detail in the following subsections.
 
-\newpage
 \section{Block Diagram}
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=14cm]{images/block diagram.png}
+    \includegraphics[width=12cm]{images/block diagram.png}
     \caption{ASAR Architecture Block Diagram}
     \label{fig:block-digram}
 \end{figure}
@@ -70,20 +71,20 @@ Preprocessing is the preliminary step that transforms the data into a format tha
 
 
 \subsection{Modular Decomposition}
-Image enhancement improves the quality of images for human perception by removing noise, reducing blurring, increasing contrast, and providing more detail. This section will provide some of the techniques used in image enhancement In \cite{inbook}. 
+Image enhancement improves the quality of images for human perception by removing noise, reducing blurring, increasing contrast, and providing more detail \cite{inbook}. 
 
 \begin{itemize}[labelindent=1em,labelsep=0.25cm,leftmargin=*]
-        \item[\char `A)] \textit{\textbf{Resize Image}}\\
+        \item[\char `A)] \textbf{Resize Image:-}\\
         Images are normalized into a specific size, decided empirically or experimentally depending on the application and the feature extraction or classification techniques used, then features are extracted from all images  with the same size in order to provide data uniformity. 
-        \item[\char `B)] \textit{\textbf{Normalization}}\\  
-        The Histogram Equalization \cite{equalization} evenly distributes the occurrence of pixel intensities so that the entire range of intensities is considered. This method usually increases the global contrast of images, especially when the usable data of the image is represented by close contrast values. Through this adjustment, the intensities can be better distributed on the histogram. This allows for areas of lower local contrast to gain a higher contrast. Histogram equalization accomplishes this by effectively spreading out the most frequent intensity values. Then probability density function (pdf) is calculated for the histogram shown Fig.\ref{fig:equalize}.
+        \item[\char `B)] \textbf{Normalization:-}\\  
+        The Histogram Equalization \cite{equalization} evenly distributes the occurrence of pixel intensities so that the entire range of intensities is considered. This method usually increases the global contrast of images, especially when the usable data of the image is represented by close contrast values. Through this adjustment, the intensities can be better distributed on the histogram. This allows for areas of lower local contrast to gain a higher contrast. Histogram equalization accomplishes this by effectively spreading out the most frequent intensity values. Then probability density function (pdf) is calculated for the histogram shown Figure\ref{fig:equalize}.
         \begin{figure}[!htb]
             \centering
             \includegraphics[width=11cm]{images/equalize.png}
             \caption{Affective result of proposed adaptive histogram equalization}
             \label{fig:equalize}
         \end{figure}
-        \item[\char `C)] \textit{\textbf{Gaussian Blur}}\\ 
+        \item[\char `C)] \textbf{Gaussian Blur:-}\\ 
         applying a Gaussian filter of a standard deviation   $\sigma$ for noise
         reduction purposes, the gradient magnitude is then computed using the
         simple energy function:
@@ -92,7 +93,7 @@ Image enhancement improves the quality of images for human perception by removin
             e(I) = [\frac{\partial}{\partial x} I] + [\frac{\partial}{\partial y} I]
             \label{equ:blur}
         \end{equation}
-        \item[\char `D)] \textit{\textbf{Gray Scaling}}\\
+        \item[\char `D)] \textbf{Gray Scaling:-}\\
         A grayscale (or graylevel) image is simply one in which the only colors are shades of gray. The reason for differentiating such images from any other sort of color image is that less information needs to be provided for each pixel.so, it is only necessary to specify a single intensity value for each pixel, as opposed to the three intensities needed to specify each pixel in a full-color image.
         grayscale images are entirely sufficient for an easy process and so there is no need to use more complicated and harder-to-process color images.
         
@@ -102,9 +103,9 @@ Image enhancement improves the quality of images for human perception by removin
             Ig = 0.2989 * IR + 0.5870 * IG + 0.1140 * IB
             \label{equ:gray}
         \end{equation}
-        \item[\char `E)] \textit{\textbf{Gaussian Thresholding (OTSU)}}\\
+        \item[\char `E)] \textbf{Gaussian Thresholding (OTSU):-}\\
         The goal of thresholding \cite{thresholding} an image is to classify pixels as either “dark” or “light”.\\
-        There are numerous methods for image thresholding which already been used by some researchers. The most common thresholding method has been proposed by Otsu . Otsu’s method works better where the clear separation between foreground and background exists or where image illumination is not variable shown in Fig \ref{fig:otsu}. However, real-life images possess especially in handwriting images various kinds of degradations (e.g. illumination contrast, skewed, stains, and noise) that weaken the thresholding proposed by Otsu’s. Gaussian thresholding (OTSU) with binary inverse shown in Fig.\ref{fig:otsubnv}.
+        There are numerous methods for image thresholding which already been used by some researchers. The most common thresholding method has been proposed by Otsu . Otsu’s method works better where the clear separation between foreground and background exists or where image illumination is not variable shown in figure \ref{fig:otsu}. However, real-life images possess especially in handwriting images various kinds of degradations (e.g. illumination contrast, skewed, stains, and noise) that weaken the thresholding proposed by Otsu’s. Gaussian thresholding (OTSU) with binary inverse shown in figure\ref{fig:otsubnv}.
         \begin{figure}[!htb]
             \centering
             \includegraphics[width=11cm]{images/otsu.png}
@@ -118,12 +119,12 @@ Image enhancement improves the quality of images for human perception by removin
             \caption{Gaussian thresholding (OTSU) with binary inverse}
             \label{fig:otsubnv}
         \end{figure}
-         \item[\char `F)] \textit{\textbf{Median Subtraction}}\\
+         \item[\char `F)] \textbf{Median Subtraction:-}\\
          Removing noise is to remove information coming from the
         background such as show-through effects, interfering strokes
         due to the seeping of ink during a long period of storage, spots of
         humidity and curvature effect. Example for the image before
-        using the filter method shown in Fig.\ref{fig:bfmed} 
+        using the filter method shown in figure\ref{fig:bfmed} 
         
         \begin{figure}[!htb]
             \centering
@@ -134,7 +135,7 @@ Image enhancement improves the quality of images for human perception by removin
         
         In median filtering \cite{median}, the neighboring pixels are ranked
         according to brightness (intensity) and the median value
-        becomes the new value for the central pixel, shown in Fig.\ref{fig:afmed}.
+        becomes the new value for the central pixel, shown in figure\ref{fig:afmed}.
         the value of an output pixel is determined by the median of the
         neighborhood pixels.
         
@@ -150,7 +151,7 @@ Image enhancement improves the quality of images for human perception by removin
 This module is responsible for applying the text-line segmentation technique. Text-line segmentation is recognized as being an important step for handwritten text recognition because inaccurate segmentation will cause errors in the recognition step. %..
 
 \subsection{Functional Description}
-In this module, we will apply our method for text-line segmentation. Fig \ref{fig:flow_line} shows the flowchart of the proposed system. The proposed method consists of two stages. In the first stage, the mathematical morphology technique is used for constructing bridges between the components. In the next stage, find contours technique is proposed for the segmentation of the text into lines.
+In this module, we will apply our method for text-line segmentation. Figure \ref{fig:flow_line} shows the flowchart of the proposed system. The proposed method consists of two stages. In the first stage, the mathematical morphology technique is used for constructing bridges between the components. In the next stage, find contours technique is proposed for the segmentation of the text into lines.
         \begin{figure}[!htb]
             \centering
             \includegraphics[width=14cm]{images/flowchart_line_segmentation.png}
@@ -166,7 +167,7 @@ Mathematical morphology is a tool for extracting image components that are usefu
 There are two basic morphological operators: erosion and dilation. These operators are usually applied in tandem. Opening and closing are two derived operations defined in terms of erosion and dilation.
 
 \begin{itemize}
-        \item {\textbf{Erosion:}}
+        \item {\textbf{Erosion:}}\\
             The erosion operation uses a structuring
             element for reducing or shrinking the shapes contained in the input image:
         
@@ -176,7 +177,7 @@ There are two basic morphological operators: erosion and dilation. These operato
                 \end{equation}
             where A is the image, B is the structure element, and z is the points in B.
                 
-    \item {\textbf{Dilation:}}
+    \item {\textbf{Dilation:}}\\
             The dilation operation uses a structuring element characteristics for expanding the image:
         
             \begin{equation}
@@ -184,14 +185,14 @@ There are two basic morphological operators: erosion and dilation. These operato
                 \label{equ:Dilation-function}
             \end{equation}
             where A is the image, B is the structure element, and z is the points in B.
-            \item {\textbf{Opening:}}
+            \item {\textbf{Opening:}}\\
             The opening is defined as an erosion followed by a dilation using the same structuring element. Opening of a grey-level image A and structuring element B, denoted \textbf{A $\circ $ B} , is defined as follows:
         \begin{equation}
             A \circ  B = \left ( A \ominus B \right ) \oplus B
             \label{equ:Opening-function}
         \end{equation}
             
-            \item {\textbf{Closing:}}
+            \item {\textbf{Closing:}}\\
             Closing is defined as a dilation followed by an erosion using the same structuring element for both operations. Closing of a grey-level image A and structuring element B, denoted \textbf{A $\bullet$ B} , is defined as follows:
         \begin{equation}
             A \bullet B = \left ( A \oplus   B \right ) \ominus B
@@ -205,7 +206,7 @@ As it can be seen above and in general in any morphological operation the struct
 \noindent
 A structuring element is a matrix consisting of only 0's and 1's that can have any arbitrary shape and size. Typically are much smaller than the image being processed, while the pixels with values of 1 define the neighborhood. The center pixel of the structuring element, called the origin, identifies the pixel of interest – the pixel being processed.
 \noindent
-For example, Fig.\ref{fig:structuring-element} illustrates a diamond-shaped structuring element of 7x7 size.
+For example, Figure\ref{fig:structuring-element} illustrates a diamond-shaped structuring element of 7x7 size.
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=5cm]{images/SE.png}
@@ -214,7 +215,7 @@ For example, Fig.\ref{fig:structuring-element} illustrates a diamond-shaped stru
 \end{figure} \\
 
 
-To begin with, a set of sequential morphological operators is applied to the binary image Fig \ref{fig:input_binary_img} to extract points that have high gradients to their background as the contrast feature and to obtain a processed image version, with the intention that every connected pixel component represents a text line.Fig \ref{fig:Flowchart_MO} shows the whole procedure of our novel morphology-based technique to extract the feature. The series of morphological operations will be discussed in the following:%Done
+To begin with, a set of sequential morphological operators is applied to the binary image figure \ref{fig:input_binary_img} to extract points that have high gradients to their background as the contrast feature and to obtain a processed image version, with the intention that every connected pixel component represents a text line.Figure \ref{fig:Flowchart_MO} shows the whole procedure of our novel morphology-based technique to extract the feature. The series of morphological operations will be discussed in the following:%Done
 \begin{figure}[H]
     \centering
     \includegraphics[width=6cm, height=9cm]{images/input.png}
@@ -223,9 +224,9 @@ To begin with, a set of sequential morphological operators is applied to the bin
 \end{figure}
 
 \begin{itemize}
-        \item[\char `a)] \textit{\textbf{Closing}}
+        \item[\char `a)] \textbf{Closing:-}
          
-         A closing is used to close holes inside of objects or for connecting components together.Fig \ref{fig:closing} shows the result after applying the closing on the binary input  image.
+         A closing is used to close holes inside of objects or for connecting components together.Figure \ref{fig:closing} shows the result after applying the closing on the binary input  image.
          
          The closing operation has filled in gaps that are smaller than or the same size as the structuring element. Hence, the closing could be useful for connecting objects that are near each other, while not affecting objects that are too far apart.
 
@@ -248,16 +249,16 @@ To begin with, a set of sequential morphological operators is applied to the bin
             \label{fig:closing}
         \end{figure}
 
-        \item[\char `b)] \textit{\textbf{Erosion}}
+        \item[\char `b)] \textbf{Erosion:-}
         
         We have used morphological operations, mainly, erosion to extract the useful foreground and background information. Erosion is one of two fundamental operations in morphological image processing from which all other morphological operations are based. For details about this see \cite{esosion}. After Closing, we will have a smoothed image, where the foreground part belongs to black text regions and the background part consists of white regions. By erosion, we determine some important information from the foreground and background portions which are very helpful in our line segmentation purpose.
         
-        Fig \ref{fig:erosio_img} shows the result after applying the erosion to our image after the closing step.
+        Figure \ref{fig:erosio_img} shows the result after applying the erosion to our image after the closing step.
 
-        \item[\char `c)] \textit{\textbf{Blurring}}
+        \item[\char `c)] \textbf{Blurring:-}\\
         When we blur an image, we make the color transition from one side of an edge in the image to another smooth rather than sudden. So, we’ll do is apply an average blur on the image after erosion  using a 99 x 1 kernel. This will help smooth out high-frequency noise in our image. A blur is a very common operation we need to perform before other tasks such as thresholding.
         
-        This Fig \ref{fig:Blurring} shows this operation.
+        This figure \ref{fig:Blurring} shows this operation.
         
          \begin{figure}[!htb]
              \centering
@@ -278,11 +279,12 @@ To begin with, a set of sequential morphological operators is applied to the bin
             \label{fig:erosion-blurring}
         \end{figure}
         
+        \newpage
         
-        \item[\char `d)] \textit{\textbf{Thresholding}}
+        \item[\char `d)] \textbf{Thresholding:-}\\
         The thresholding is a key step in our segmentation method, its aim is to threshold the resulting smoothed image in order to isolate the blobs corresponding to line components.
         
-        Now, we can apply Simple Thresholding to Blurred images as shown in Figure \ref{fig:treshold_img}.
+        Now, we can apply Simple Thresholding to Blurred images as shown in figure \ref{fig:treshold_img}.
         
         \begin{figure}[H]
             \centering
@@ -291,11 +293,13 @@ To begin with, a set of sequential morphological operators is applied to the bin
             \label{fig:treshold_img}
         \end{figure}
         
-        \item[\char `e)] \textit{\textbf{Dilation}}
-        Finally, We applied the dilation operation on the Thresholding image to make objects more visible and fill in small holes in objects. Lines appear thicker, and filled shapes appear larger. Dilation makes the groups of text to be detected more accurately as shown in the Fig \ref{fig:Dilation_img}.%Done
+        \newpage
+
+        \item[\char `e)] \textbf{Dilation}\\
+        Finally, We applied the dilation operation on the Thresholding image to make objects more visible and fill in small holes in objects. Lines appear thicker, and filled shapes appear larger. Dilation makes the groups of text to be detected more accurately as shown in the figure \ref{fig:Dilation_img}.%Done
         
-        \item[\char `f)] \textit{\textbf{Labeling}}
-        This step aims to show all connected regions in the dilated image by applying connected-component labeling as shown in the Fig \ref{fig:Labeling_img}.
+        \item[\char `f)] \textbf{Labeling}\\
+        This step aims to show all connected regions in the dilated image by applying connected-component labeling as shown in the figure \ref{fig:Labeling_img}.
         \\
         Connected Component Labeling solves the problem of finding out parts of the image that are connected physically, irrespective of color.
         
@@ -335,9 +339,9 @@ After the completion of the first stage, the next stage is to extract individual
 
 Contours are typically used to find a white object from a black background. All the above morphological operations are applied so that the Contours can detect the boundary edges of the blocks of text of the image.\\
 
-Now, we can find all contours in the dilated image, check all the areas of each of the contours to identify which contours represent the text line and draw these contours to show all text lines in the image as shown in this Fig \ref{fig:drawing}.
+Now, we can find all contours in the dilated image, check all the areas of each of the contours to identify which contours represent the text line and draw these contours to show all text lines in the image as shown in this figure \ref{fig:drawing}.
 
-We can crop all these contours to extract individual text lines from an image as shown in this Fig \ref{fig:crop}.
+We can crop all these contours to extract individual text lines from an image as shown in this figure \ref{fig:crop}.
 
 \begin{figure}[!htb]
      \centering
@@ -369,14 +373,14 @@ the process of dividing the written text into meaningful units, such as words, a
 
 \begin{itemize}[labelindent=1em,labelsep=0.25cm,leftmargin=*]
 
-     \item[\char `A)] \textit{\textbf{Gray Scaling:- }} \\ 
-        change the pixels of an image to gray in order to  make the image easier to analyze.
+     \item[\char `A)] \textbf{Gray Scaling:- } \\ 
+        This step to change the pixels of an image to gray in order to  make the image easier to analyze.
         applying grayscaling on the input line shown
-        in Fig\ref{fig:origin}  to grayscale shown in Fig.\ref{fig:gray}
+        in figure\ref{fig:origin}  to grayscale shown in figure\ref{fig:gray}
         
-        \item[\char `B)] \textit{\textbf{Thresholding:- }} \\ 
-        change the pixels of an image to black and white in order to  make the image easier to analyze.
-        applying thresholding on the grayscaled line shown in Fig \ref{fig:thresh}
+        \item[\char `B)] \textbf{Thresholding:- } \\ 
+        This step to change the pixels of an image to black and white in order to  make the image easier to analyze.
+        applying thresholding on the grayscaled line shown in figure \ref{fig:thresh}
         
          \begin{figure}[H]
         \centering
@@ -398,26 +402,26 @@ the process of dividing the written text into meaningful units, such as words, a
         \caption{Line after thresholding}
         \label{fig:thresh}
         \end{figure} 
-        \item[\char `C)] \textit{\textbf{Removing Dots:-}}\\
-        We applied to remove dots and Tashkel ,which have a very small area, in order to get the text itself to be easier to find each word as a separated contour.shown in Fig \ref{fig:redots}
+        \item[\char `C)] \textbf{Removing Dots:-}\\
+        We applied to remove dots and Tashkel ,which have a very small area, in order to get the text itself to be easier to find each word as a separated contour.shown in figure \ref{fig:redots}
         \begin{figure}[!htb]
         \centering
         \includegraphics[width=10cm]{images/removedots.png}
         \caption{Line after removing dots}
         \label{fig:redots}
         \end{figure} 
-        \item[\char `D)] \textit{\textbf{Finding Contour:-}}\\  
+        \item[\char `D)] \textbf{Finding Contour:-}\\  
          In contour tracing \cite {contour} methods the pixels that form the outer shape of the character or word are extracted. Researchers used many ways to determine the cutting points on the contour. In general, contour-based methods avoid the problems that appear when applying thinning methods because they depend on extracting the structure of the word, which gives a clear description of it. This kind of method is sensitive to noise, which requires one to perform some enhancements as a pre-processing step.\\
          \newline
          Contour-based segmentation technique gives a clear description of the word characters shape. This method facilitates determining the right segmentation points.\\
          \newline
          Many methods have been tested to extract the contour of the abstracted word/sub-word image. The best results can be obtained when using the contour extraction method implemented into the \textbf{OpenCV} library named as \textbf{cv2.findContours()} function.
-         \item[\char `E)] \textit{\textbf{Extracting Contoured Sub-words:-}}\\
+         \item[\char `E)] \textbf{Extracting Contoured Sub-words:-}\\
          After applying \textbf{cv2.findContours()} function,
-         \textbf{cv2.drawContours()} from \textbf{Opencv} image processing toolbox used to draw a contour plot of the  image shown in Fig \ref{fig:con2}. 
+         \textbf{cv2.drawContours()} from \textbf{Opencv} image processing toolbox used to draw a contour plot of the  image shown in figure \ref{fig:con2}. 
          and plotting each crop of each sub-word is visualized 
-         by \textbf{cv2.drawContours()} shown in Fig. \ref{fig:con4}
-         after cropping each sub-word is shown in Fig. \ref{fig:crops}
+         by \textbf{cv2.drawContours()} shown in figure \ref{fig:con4}
+         after cropping each sub-word is shown in figure \ref{fig:crops}.
     \end{itemize}
     
 \begin{figure}[!htb]
@@ -440,6 +444,8 @@ the process of dividing the written text into meaningful units, such as words, a
     \caption{Cropping each sub-word from the line}
     \label{fig:crops}
 \end{figure} 
+
+\clearpage
 
 \section{Word Spotting}
 This module is responsible for applying word spotting methods, that's because of the huge variability and noise in historical handwritten documents it is inaccurate to use OCR techniques to extract information. This project focuses on word spotting techniques with Deep learning in order to digitize information in handwritten documents and accelerate historic research.
@@ -586,7 +592,7 @@ Given a test image $x$, the PHOSCNet is used to predict the PHOC and PHOS repres
     \label{equ:cosine-similarity}
 \end{equation}
 
-\section{Model development}
+\section{Model Development}
 This module is responsible for developing the model to be ready for predicting unseen words with different styling. This module will include model development stages like data preparing, data augmentation, and training hyperparameters.
 
 \subsection{Functional Description}
@@ -603,6 +609,7 @@ We have mentioned in the survey stage that we studied more than one dataset and 
 The stage of exploring the dataset and preparing it for work was a very difficult stage, and we faced many problems that we had to deal with professionally in order to ensure good performance during the work.
 This stage has been divided into sub-stages as follows:
 \begin{itemize}
+  \itemsep0em
   \item Dataset Loading
   \item Data Understanding
   \item Dataset Exploration
@@ -611,7 +618,7 @@ This stage has been divided into sub-stages as follows:
 
 \paragraph{Dataset Loading}\mbox{}\\
 Here the VML-HD dataset has been downloaded from its official website and on the website, there are two versions of the dataset, the first is the dataset is complete images of the pages of the manuscripts that have been selected to work in this dataset and the second is the dataset after it has been hashed into subwords and we had to This situation determines which of the two versions we will choose to work, the two versions and their studies have been uploaded to determine the best and most appropriate from our point of view.
-After downloading the data files from the internet, we will do the data cropping process using the image files and the xml file attached to the data, which we have already mentioned is created from the WEB-GT framework.
+After downloading the data files from the internet, we will do the data cropping process using the image files and the XML file attached to the data, which we have already mentioned is created from the WEB-GT framework.
 
 \paragraph{Data Understanding}\mbox{}\\
 After downloading the dataset, we began to study it in-depth, get to know it closely, understand it, find its strengths and weaknesses, and also choose which of the two versions on the official website is the best for us and the most suitable for work.
@@ -628,54 +635,54 @@ We mentioned that the five books that were exported for work were named as follo
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
 STATISTICS OF THE BOOK & 3249138 & 3157556 & 3158466 & 3426930 & 3368132 \\  \hline
-number of pages & 101 & 196 & 136 & 136 & 94 \\ \hline 
-number of lines &  1414  & 1656 & 2022 & 1596 & 1860 \\ \hline 
-number of words & 27274  & 28671 & 34791 & 31697 & 35456 \\ \hline 
-number of classes & 2539 & 2471 & 2751 & 3200 & 1770 \\  \hline 
-avg number of words per page & 270.04 & 146.28 & 255.82 & 226.41 & 377.19 \\ \hline 
-avg number of lines per page & 14.0 & 8.45 & 14.87 & 11.4 & 19.79 \\ \hline 
-avg number of words per line & 19.29 & 17.31 & 17.21 & 19.86 & 19.06 \\\hline 
-avg number of words classes & 10.74 & 11.6 & 12.65 & 9.91 & 20.03\\  \hline 
+Number of pages & 101 & 196 & 136 & 136 & 94 \\ \hline 
+Number of lines &  1414  & 1656 & 2022 & 1596 & 1860 \\ \hline 
+Number of words & 27274  & 28671 & 34791 & 31697 & 35456 \\ \hline 
+Number of classes & 2539 & 2471 & 2751 & 3200 & 1770 \\  \hline 
+Average number of words per page & 270.04 & 146.28 & 255.82 & 226.41 & 377.19 \\ \hline 
+Average number of lines per page & 14.0 & 8.45 & 14.87 & 11.4 & 19.79 \\ \hline
+Average number of words per line & 19.29 & 17.31 & 17.21 & 19.86 & 19.06 \\\hline
+Average number of words classes & 10.74 & 11.6 & 12.65 & 9.91 & 20.03\\  \hline
 \end{tabular}
 \caption{The statistics for each book.}
 \label{table:statistics_for_each_book}
 \end{table}
 
+\noindent
 In general, at the level of the whole data set, we find that we have reached these descriptive statistics, which are shown in a table\ref{table:statistics_for_all_dataset}
 
 \begin{table}[!htb]
 \centering
 \begin{tabular}{|l|c|}
 \hline
-total number of pages & 668 \\ \hline
-total number of lines & 8548 \\ \hline
-total number of words & 157889 \\ \hline
-total number of classes & 6180 \\ \hline
+Total number of pages & 668 \\ \hline
+Total number of lines & 8548 \\ \hline
+Total number of words & 157889 \\ \hline
+Total number of classes & 6180 \\ \hline
 \end{tabular}
 \caption{Total statistics of the books.}
 \label{table:statistics_for_all_dataset}
 \end{table}
 
+\newpage
+
 \paragraph{Data Cleaning}\mbox{}\\
 Data cleaning is the process of repairing or removing invalid, damaged, incorrectly formatted, duplicate, or incomplete data within a data set. When merging multiple data sources, there are many opportunities for data to be duplicated or misnamed. If the data is incorrect, the results and algorithms are unreliable, even though they may appear correct. There is no one absolute way to describe the exact steps in the data cleaning process because the processes will vary from dataset to dataset. But it's important to design your data cleaning process so you know you're doing it the right way every time.
-After the process of data cropping based on the xml file, we found that there are some classes that do not fit the work and have errors, such as the classes called by names "k", "mislabel" , \<ءية> , \<ءء> , \<ءه> etc...\\
+After the process of data cropping based on the XML file, we found that there are some classes that do not fit the work and have errors, such as the classes called by names "k", "mislabel" , \<ءية> , \<ءء> , \<ءه> etc...\\
+
+
 Since the people who created this dataset and gave it names are not Arabs and do not know the Arabic language well, there were many categories that they had named wrongly and some of the similar letters between them did not differentiate between them during the names such as letters \<حـ>, \<جـ>, \<غ>, \<ع>, \<ز> , \<ر> and other.
 As well as changing some letters in one word, such as \<نلعنهم> they know it with \<نعلنهم> and \<يمنيهم> know it with \<يمينهم> and other.
 
 \paragraph{Data Augmentation}\mbox{}\\
 
+\noindent
 The quantity and variety of data are important factors in the effectiveness of most machine learning models. The quantity and diversity of data provided during training greatly influence the prediction accuracy of these models.
 Applying a set of transformations to the available data to collect new data is one technique for dealing with the challenge of limited data. Data augmentation refers to the process of collecting new data from existing data.\\
 
 Data augmentation is a set of techniques used to increase the amount of data in a machine learning model by adding slightly modified copies of already existing data or newly created synthetic data from existing data. Helps streamline the machine learning model and reduce data overprocessing.
 we use the homography Augmentation method to increase data, this creates an augmentation by computing a homography from three points in the image to three randomly generated points.
 Then we used Affine Transformation from the OpenCV library, A transformation that can be expressed in the form of matrix multiplication (linear transformation) followed by a vector addition (translation).
-we can use an Affine Transformation to express:
-\begin{itemize}
-  \item Rotations (linear transformation)
-  \item Translations (vector addition)
-  \item Scale operations (linear transformation)
-\end{itemize}
 
 \noindent
 An example of data augmentation shown in the figure \ref{fig:Data Augmentation Example}
@@ -704,12 +711,13 @@ An example of data augmentation shown in the figure \ref{fig:Data Augmentation E
         \label{fig:Data Augmentation Example}
 \end{figure}
 
-
-
+\newpage
 \subsubsection{Model Hyperparameters} 
-Hyperparameter tuning is an essential part of controlling the behavior of the  model. If we don’t correctly tune our hyperparameters, our estimated model parameters produce suboptimal results, as they don’t minimize the loss function. This means our model makes more errors.\\
+Hyperparameter tuning is an essential part of controlling the behavior of the  model. If we don’t correctly tune our hyperparameters, our estimated model parameters produce sub optimal results, as they don’t minimize the loss function. \\
+
 Hyperparameter tuning consists of finding a set of optimal hyperparameter values for a learning algorithm while applying this optimized algorithm to any data set. That combination of hyperparameters maximizes the model’s performance, minimizing a predefined loss function to produce better results with fewer errors.\\
 
+\noindent
 Here is a list of hyperparamaters that we used in our model :
 \begin{itemize}[itemsep=1pt, topsep=5pt]
     \item \textbf{Number of Hidden layers:-}\\
@@ -730,52 +738,60 @@ Here is a list of hyperparamaters that we used in our model :
     \item Dense layer with 505 neurons, activation='sigmoid' for PHOC model
     \item Output layer (PHOSC) which is hybrid  from PHOS model and PHOC model.
 \end{itemize} 
-    \item \textbf{Number of neurons per layer:-}\\
-    the number of neurons in every layer is set to be the same. It also can be made different. The number of neurons should be adjusted to the solution complexity. The task with a more complex level to predict needs more neurons.\\
-    the structure of the model shown in Fig \ref{fig:layers}
-    \begin{figure}
-    \centering
-    \includegraphics[width=10cm, height=23cm]{images/layers.png}
-    \caption{The structure of PHOSC model.}
-    \label{fig:layers}
-    \end{figure}
+    \item \textbf{Number of Neurons per Layer:-}\\
+    The number of neurons in every layer is set to be the same. It also can be made different. The number of neurons should be adjusted to the solution complexity. The task with a more complex level to predict needs more neurons.\\
+    the structure of the model shown in figure \ref{fig:layers}
+
     \item \textbf{Activation Function:-}\\
      An activation function is a parameter in each layer. Input data are fed to the input layer, followed by hidden layers, and the final output layer. The output layer contains the output value. The input values moving from a layer to another layer keep changing according to the activation function. The activation function decides how to compute the input values of a layer into output values. The output values of a layer are then passed to the next layer as input values again. The next layer then computes the values into output values for another layer again.\\
      We used:-
      \begin{itemize}[itemsep=1pt, topsep=5pt]
-    \item Relu activation function:
-    in the hidden layers and the output layer of PHOS model 
-    \item sigmoid activation function:
-    in the output layer of PHOC model.  
-    \end{itemize} 
+        \item Relu activation function:
+        in the hidden layers and the output layer of PHOS model 
+        \item Sigmoid activation function:
+        in the output layer of PHOC model.  
+     \end{itemize} 
      \item \textbf{Strides:-}\\
-     we used strides=2 in the max pooling kernel, that for dimensionality reduction of the matrix.
+     We used strides=2 in the max pooling kernel, and for dimensionality reduction.
     
      \item \textbf{Dropout:-}\\
-     we used  Dropout=0.5 in both PHOC and PHOS model,
+     We used  Dropout=0.5 in both PHOC and PHOS model,
       Dropout is used to regularize our model and reduce overfitting.
     \item \textbf{Losses:-}\\
-     we used :
+     We used :
      \begin{itemize}[itemsep=1pt, topsep=5pt]
-    \item Cross-entropy loss in PHOC model:\\
-     cross-entropy arises as the natural cost function to use if a sigmoid  nonlinearity in the output layer of the network, and maximizes the likelihood of classifying the input data correctly.
-    \item means squared error (MSE) in PHOS model :\\
-    it is the right loss for regression, where the distance between two
+        \item Cross-Entropy Loss in PHOC model: cross-entropy arises as the natural cost function to use if a sigmoid  non-linearity in the output layer of the network, and maximizes the likelihood of classifying the input data correctly.
+        \item Means Squared Error (MSE) in PHOS model: It is the right loss for regression, where the distance between two
 values that can be predicted are small.
      \end{itemize} 
      \item \textbf{Optimizer:-}\\
-     we used \textbf{Adam} optemizer with learning rate = 1e-4 and weight decay=5e-5.
-     \item \textbf{Learning Rate:-}\\
-     Learning rate controls the step size for a model to reach the minimum loss function. A higher learning rate makes the model learn faster, but it may miss the minimum loss function and only reach the surrounding of it. A lower learning rate gives a better chance to find a minimum loss function shown in Fig \ref{fig:lr}. As a tradeoff lower learning rate needs higher epochs, or more time and memory capacity resources.
+     We used \textbf{Adam} optimizer with learning rate = 1e-4 and weight decay=5e-5.
+     
+    \item {\textbf{Callbacks}} \\
+    We have two build-in Tensorflow callbacks
+    \begin{itemize}[itemsep=1pt, topsep=5pt]
+        \item Early Stopping: mainly used to avoid overfitting.
+        \item ReduceLROnPlateau: mainly used to monitors a quantity and if no improvement is seen for number of epochs, the learning rate is reduced.
+     \end{itemize} 
+    
+     \item {\textbf{Batch Size} = 32}
+     \item {\textbf{Epochs} = 50}
+     \item {\textbf{Learning rate} = 1e-4} \\
+     learning rate controls the step size for a model to reach the minimum loss function. A higher learning rate makes the model learn faster, but it may miss the minimum loss function and only reach the surrounding of it. A lower learning rate gives a better chance to find a minimum loss function shown in figure \ref{fig:lr}. As a tradeoff lower learning rate needs higher epochs, or more time and memory capacity resources.
      
      \begin{figure}[!htb]
         \centering
-        \includegraphics[width=8cm]{images/lr.png}
+        \includegraphics[width=6cm]{images/lr.png}
         \caption{Learning rate illustration.}
         \label{fig:lr}
     \end{figure}
     
-     \item \textbf{Batch Size = 32}
-     \item \textbf{Epochs = 50}
+    \begin{figure}
+        \centering
+        \includegraphics[width=10cm, height=23cm]{images/layers.png}
+        \caption{The structure of PHOSC model.}
+        \label{fig:layers}
+    \end{figure}
+    
 \end{itemize}
 
