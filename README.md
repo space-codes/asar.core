@@ -1,7 +1,8 @@
 # arabic-manuscript
-This is our graducation project for arabic manuscript detection and recognition
+This is our graduation project for arabic manuscript detection and recognition
 
 ### Related documents
+- [Deployed site](http://asar.eastasia.cloudapp.azure.com)
 - [Book link](https://www.overleaf.com/3856911155ghxyztqchcvn)
 - [Presentation link](https://docs.google.com/presentation/d/1da_hh0NzdIYmv0M1CfQO4rgQKG4R1iWRHqUx8erQX9s/edit?usp=sharing)
 - [Seminar Slides](https://docs.google.com/presentation/d/1kO4rt0jxKNDid5EmOXzjrB1SmURPgOQH/edit?usp=sharing&ouid=117589950685366286966&rtpof=true&sd=true)
