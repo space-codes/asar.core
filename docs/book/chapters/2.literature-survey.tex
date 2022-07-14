@@ -12,7 +12,7 @@ Handwriting recognition is a process of recognizing handwritten text on a paper 
 \subsection{Optical Character Recognition (OCR)}
 Optical character recognition (\acrshort{ocr}) is essential in various real-world applications, such as digitizing learning resources to assist visually impaired people and transforming printed resources into electronic media. However, the development of \acrshort{ocr} for printed Arabic scripts is a challenging task. These challenges are due to the specific characteristics of the Arabic script. Therefore, different methods have been proposed for developing Arabic \acrshort{ocr} systems, and this paper \cite{Alghamdi2018} aims to provide a comprehensive review of these methods. This paper also discusses relevant issues of printed Arabic \acrshort{ocr} including the challenges of printed Arabic script and performance evaluation. It concludes with a discussion of the current status of printed Arabic \acrshort{ocr}, analyzing the remaining problems in the field of printed Arabic \acrshort{ocr} and providing several directions for future research. \\
 
-There is no doubt that printed Arabic \acrshort{ocr} faces a number of challenges and there is still an intensive need for more research. However, most challenges facing the development of Arabic \acrshort{ocr} are due to the characteristics of Arabic script. Arabic script has some features that distinguish it from other languages. Compared to English, the most obvious feature of Arabic script is that it is written cursively from right to left in both printed and handwritten. The greatest challenges are due to the more complex characteristics of Arabic script. In the following section, the characteristics of Arabic script that may complicate recognition are explained in Figure \ref{fig:ocr2}.
+There is no doubt that printed Arabic \acrshort{ocr} faces a number of challenges and there is still an intensive need for more research. However, most challenges facing the development of Arabic \acrshort{ocr} are due to the characteristics of Arabic script. Arabic script has some features that distinguish it from other languages. Compared to English, the most obvious feature of Arabic script is that it is written cursively from right to left in both printed and handwritten. The greatest challenges are due to the more complex characteristics of Arabic script. In the following section, the characteristics of Arabic script that may complicate recognition are explained in figure \ref{fig:ocr2}.
 
 \begin{figure}[!htb]
     \centering
@@ -103,7 +103,7 @@ the preprocessing techniques which are applied in Arabic \acrshort{ocr}:
         \end{itemize} 
 
          \item[\char `6-] \textbf{Thinning and Skeletonization:}\\
-         The process of peeling off a pattern as many pixels as possible without affecting the general shape of the pattern In other words, it involves operations that can be implemented in order to produce the skeleton of text images. Thinning is a crucial processing step for text recognition. When applying thinning algorithms to Arabic scripts, various obstacles are encountered. One problem is the reduction in the number of dots in some Arabic characters as a result of the thinning process for which the number of dots is a crucial aspect in differentiating between these characters. Also, dots in Arabic characters are likely to be vulnerable to noise, results are shown in Figure. \ref{fig:thin}
+         The process of peeling off a pattern as many pixels as possible without affecting the general shape of the pattern In other words, it involves operations that can be implemented in order to produce the skeleton of text images. Thinning is a crucial processing step for text recognition. When applying thinning algorithms to Arabic scripts, various obstacles are encountered. One problem is the reduction in the number of dots in some Arabic characters as a result of the thinning process for which the number of dots is a crucial aspect in differentiating between these characters. Also, dots in Arabic characters are likely to be vulnerable to noise, results are shown in figure \ref{fig:thin}.
 
         \textbf{}
         \begin{figure}[H]
@@ -192,7 +192,7 @@ For Arabic \acrshort{ocr}, conducting performance evaluation is challenging as n
 Convolutional Neural Networks (\acrshort{cnn}s) are very effective in perceiving the structure of handwritten characters/words in ways that help in the automatic extraction of distinct features and make \acrshort{cnn} the most suitable approach for solving handwriting recognition problems.\\
 
 This paper \cite{CNN} proposes a method for recognizing the text from manuscript images using Convolutional Neural Networks (\acrshort{cnn}s). This includes preprocessing of the manuscript’s image, segmentation of the lines and characters in the manuscript, building a dataset that contains images for each character in different shapes, and classification of each character using \acrshort{cnn}.
-Figure. \ref{fig:CNN} shows the flow diagram of the methodology.
+Figure \ref{fig:CNN} shows the flow diagram of the methodology.
 
 \begin{figure}[!htb]
     \centering
@@ -217,7 +217,7 @@ Figure. \ref{fig:CNN} shows the flow diagram of the methodology.
         
         \item[\char `B)] \textbf{Line Segmentation:-} 
         
-        Line segmentation is achieved via horizontal Projection Profile (\acrshort{pp}) for the image. Horizontal \acrshort{pp} is a method used to convert the image from 2D to 1D by calculating the densities \cite{PP}. They used this method to crop out each line at the points of lower density Figure \ref{fig:line_cnn} shows the horizontal PP for the whole page, which is used to cut out each line.
+        Line segmentation is achieved via horizontal Projection Profile (\acrshort{pp}) for the image. Horizontal \acrshort{pp} is a method used to convert the image from 2D to 1D by calculating the densities \cite{PP}. They used this method to crop out each line at the points of lower density figure \ref{fig:line_cnn} shows the horizontal PP for the whole page, which is used to cut out each line.
         
         \item[\char `C)] \textbf{Character Segmentation:-} 
         
@@ -265,7 +265,7 @@ Figure. \ref{fig:CNN} shows the flow diagram of the methodology.
        The input is an image that represents a single character from the historical Arabic manuscripts. They specify the image size to be 30-by-30-by-1 for all input images. The height and the width for the input image is equal to 30 pixels. As their images are grayscale images, the channel size is 1.
        
         \item {\textbf{Convolutional Layers:}}\\
-        The convolution operation is a mathematical The convolution operation is a mathematical operation that takes an image along with a filter of a specific dimension, mostly an odd number, and applies this filter along with the image. An example of convolution is shown in Figure \ref{fig:cnn-onvolution}. \\
+        The convolution operation is a mathematical The convolution operation is a mathematical operation that takes an image along with a filter of a specific dimension, mostly an odd number, and applies this filter along with the image. An example of convolution is shown in figure \ref{fig:cnn-onvolution}. \\
         
         There are three convolutional layers. Each layer is followed by a
         nonlinear activation function, which is ReLU. The number of neurons varies in each convolutional layer. Particularly, the first layer has 8 neurons, the second layer has 16 neurons, and the third layer has 32 neurons.
@@ -325,7 +325,7 @@ Here, we reviewed some of the datasets as well studying each part, showing the a
 \subsection{Arabic Handwritten Character Dataset (AHCD)}
 An open-source database of 16,800 characters was written by 60 participants; Their ages range from 19 to 40 years. It was used in more than one scientific paper concerned with recognizing handwritten Arabic words so that the accuracy of working with the \acrshort{cnn} model reached 97\% sometimes.\cite{altwaijry2021arabic} It is characterized by the diversity of fonts in it, but it was not suitable for the work we want because it is included in the intelligent systems that are interested in recognizing the handwritten Arabic language using the pen and modern writing tools. 
 
-Not suitable because the way we decided to work on this project depends mainly on words and not characters. Figure\ref{fig:AHCD sample}
+Not suitable because the way we decided to work on this project depends mainly on words and not characters. Figure \ref{fig:AHCD sample}
 
 \begin{figure}[!htb]
     \centering
@@ -339,7 +339,7 @@ The open-source database is written exclusively by children between the ages of 
 
 \subsection{KHATT Dataset}
 KHATT dataset \cite{KHATT} is a constructed dataset consisting of images containing Arabic text collected from the web along with their ground truth.
-A portion of the text includes Arabic diacritics. and Multiple Arabic fonts that closely resemble the old fonts used in historical manuscripts (dating back to the 18th century) are used. We show an example in Figure\ref{fig:Sample-text-images-from-the-KHATT-dataset}
+A portion of the text includes Arabic diacritics. and Multiple Arabic fonts that closely resemble the old fonts used in historical manuscripts (dating back to the 18th century) are used. We show an example in figure \ref{fig:Sample-text-images-from-the-KHATT-dataset}
 
 There are four categories of images:
 
@@ -362,7 +362,7 @@ The handwritten manuscripts from the KHATT database are also included (KHATT con
 
 
 \subsection{IFN/ENIT Dataset}
-The IFN/ENIT \cite{IFNENIT} database contains training and testing materials for Arabic handwriting recognition software. There are more than 2,200 binary images of sample figures in handwriting from 411 writers\cite{ali2019efficient}, but they are not suitable for work in manuscripts due to the different tools of the book and are not similar to the nature of Arabic manuscripts and their number is also very small in relation to other datasets. We show an example of them in the Figure\ref{fig:Sample text images from the IFN/ENIT dataset}
+The IFN/ENIT \cite{IFNENIT} database contains training and testing materials for Arabic handwriting recognition software. There are more than 2,200 binary images of sample figures in handwriting from 411 writers\cite{ali2019efficient}, but they are not suitable for work in manuscripts due to the different tools of the book and are not similar to the nature of Arabic manuscripts and their number is also very small in relation to other datasets. We show an example of them in the figure \ref{fig:Sample text images from the IFN/ENIT dataset}
 
 \begin{figure}[!htb]
     \centering
@@ -372,7 +372,7 @@ The IFN/ENIT \cite{IFNENIT} database contains training and testing materials for
 \end{figure}
 
 \subsection{RASAM (Maghrebi) Dataset}
-In the paper \cite{RASAM} present a Maghrebi dataset, This Dataset is made up of 300 annotated images, with their related ground truth stored in an XML file (page XML format). Images come from three manuscripts selected among the collections of the Bibliotheque Universitaires des LAngues et Civilisations (BULAC): two manuscripts belong to the historical genre (MS.ARA.1977 and MS.AR.417) and the third one has to do with inheritance law (MS.ARA.609). An example of RASAM dataset is shown in the Figure \ref{fig:RASAM sample dataset}. The images of the dataset are in JPEG format and have varying resolutions from 96 DPI to 400 DPI.
+In the paper \cite{RASAM} present a Maghrebi dataset, This Dataset is made up of 300 annotated images, with their related ground truth stored in an XML file (page XML format). Images come from three manuscripts selected among the collections of the Bibliotheque Universitaires des LAngues et Civilisations (BULAC): two manuscripts belong to the historical genre (MS.ARA.1977 and MS.AR.417) and the third one has to do with inheritance law (MS.ARA.609). An example of RASAM dataset is shown in the figure \ref{fig:RASAM sample dataset}. The images of the dataset are in JPEG format and have varying resolutions from 96 DPI to 400 DPI.
 
 \begin{figure}[!htb]
     \centering
@@ -404,7 +404,7 @@ This set of data has many features such as it is large in proportion to the trai
 
 
 \subsection{VML-HD Dataset}
-In the paper \cite{VMLHD} present a new database with a handwritten Arabic script. This dataset is based on five books written by different authors in the years 1088 - 1451 Figure\ref{fig:VML-HD sample dataset}, and the entire 668 pages are annotated at the sub-word level. For each page, we manually applied bounding boxes to the different subwords and annotated the character sequences. It consists of 159,149 subwords of 326,289 letters of a vocabulary of 5509 forms of subwords. \\
+In the paper \cite{VMLHD} present a new database with a handwritten Arabic script. This dataset is based on five books written by different authors in the years 1088 - 1451 figure \ref{fig:VML-HD sample dataset}, and the entire 668 pages are annotated at the sub-word level. For each page, we manually applied bounding boxes to the different subwords and annotated the character sequences. It consists of 159,149 subwords of 326,289 letters of a vocabulary of 5509 forms of subwords. \\
 One of the advantages of this data set is that it contains examples of 5 books of different formats and character shapes, and they indicate five different eras in Arab Islamic history. \\
 
 \begin{figure}[!htb]
@@ -455,7 +455,7 @@ Finally, they generated the ground truth data for each sub-word found in the dat
 \newpage
 
 \section{Image Preprocessing}
-In this section, we will be discussing our experiments performing preprocessing on images shown in figure\ref{fig:preprocessing} . we have used Python language, Which includes using different libraries. The main ones are OpenCV and scikit-image.
+In this section, we will be discussing our experiments performing preprocessing on images shown in figure \ref{fig:preprocessing} . we have used Python language, Which includes using different libraries. The main ones are OpenCV and scikit-image.
 
 \begin{figure}[!htb]
     \centering
@@ -492,7 +492,7 @@ In this section, we will be discussing our experiments performing preprocessing 
         a different threshold value for each pixel by calculating the
         features of its neighbors. Firstly, two local methods were
         applied which are adaptive Gaussian thresholding in 
-        Figure \ref{fig:adaptive-gaussian} and adaptive mean thresholding in Figure \ref{fig:adaptive-mean} 
+        figure \ref{fig:adaptive-gaussian} and adaptive mean thresholding in figure \ref{fig:adaptive-mean} 
         
         \begin{figure}[!htb]
             \centering
@@ -558,14 +558,14 @@ In this section, we will be discussing our experiments performing preprocessing 
         the image is skewed, the sum of the differences between these
         two values will be small. In contrast, if the image’s skew is
         set correctly, the difference between them will be large. To
-        clarify this further, Figure \ref{fig:skew} shows two Horizontal PP, where
-        Figure \ref{fig:skew}a is the correctly skewed page, and Figure. \ref{fig:skew}b is the same
+        clarify this further, figure \ref{fig:skew} shows two Horizontal PP, where
+        figure \ref{fig:skew}a is the correctly skewed page, and figure \ref{fig:skew}b is the same
         page but after rotating it by 30°. Finally, the angle that leads
         to the maximum score will be chosen. After that, the image
         will be rotated using this angle value.
         \begin{figure}[!htb]
             \centering
-            \includegraphics[width=7cm]{images/skew.png}
+            \includegraphics[width=5cm]{images/skew.png}
             \caption{The effect of skew on Horizontal PP}
             \label{fig:skew}
         \end{figure}
@@ -599,7 +599,7 @@ of the dataset.
     \end{minipage}
 \end{figure}
 
-This paper \cite{8892920} proposed a novel approach to carry out the segmentation of Arabic manuscripts into text-lines and words, using deep learning. The proposed text-line segmentation system uses an \acrshort{RU} to extract x-heights from text images, then a post-processing step extracts baselines Figure \ref{fig:X-height}. The word segmentation system uses a \acrshort{cnn} with a \acrshort{blstm}, then a \acrshort{ctc} to find the alignment between the text-line transcription and the text-line image.
+This paper \cite{8892920} proposed a novel approach to carry out the segmentation of Arabic manuscripts into text-lines and words, using deep learning. The proposed text-line segmentation system uses an \acrshort{RU} to extract x-heights from text images, then a post-processing step extracts baselines figure \ref{fig:X-height}. The word segmentation system uses a \acrshort{cnn} with a \acrshort{blstm}, then a \acrshort{ctc} to find the alignment between the text-line transcription and the text-line image.
 
 \begin{figure}[!htb]
     \centering
@@ -628,11 +628,11 @@ This paper \cite{8892920} proposed a novel approach to carry out the segmentatio
         
         \item[\char `B)] \textbf{Word Segmentation:-}
         
-        For word segmentation, firstly used a \acrshort{cnn} to extract the most important features from the text-line images. All images have a normalized size of 48×1600. Every convolutional block is followed by a batch normalization that greatly reduces the vanishing gradient problem and makes the use of dropout unnecessary. The output of the \acrshort{cnn} is then sequentially passed to a \acrshort{blstm} having 100 neurons for each LSTM and followed by a \acrshort{ctc} function, as shown in Fig \ref{fig:seg_network}
+        For word segmentation, firstly used a \acrshort{cnn} to extract the most important features from the text-line images. All images have a normalized size of 48×1600. Every convolutional block is followed by a batch normalization that greatly reduces the vanishing gradient problem and makes the use of dropout unnecessary. The output of the \acrshort{cnn} is then sequentially passed to a \acrshort{blstm} having 100 neurons for each LSTM and followed by a \acrshort{ctc} function, as shown in figure \ref{fig:seg_network}
         
         Their two classes: \textbf{word}(1) and \textbf{space}(2). The
         provided ground truth is the text-lines Unicode transcription
-        where each word is labeled 1 and each space 0, as displayed in Figure \ref{fig:word_seg}. The \acrshort{ctc} decoder output is the found sequence workspace. After the training step, the projection of the probabilities of class space (output of the \acrshort{blstm}) is made on the image.
+        where each word is labeled 1 and each space 0, as displayed in the figure \ref{fig:word_seg}. The \acrshort{ctc} decoder output is the found sequence workspace. After the training step, the projection of the probabilities of class space (output of the \acrshort{blstm}) is made on the image.
         \begin{figure}[!htb]
         \centering
         \includegraphics[width=10cm]{images/seg_network.png}
@@ -650,7 +650,7 @@ This paper \cite{8892920} proposed a novel approach to carry out the segmentatio
  \end{itemize}
 
 This paper \cite{FCN} presents a method for text line segmentation
-of challenging historical manuscript images. These manuscript images contain narrow interline spaces with touching components, interpenetrating vowel signs, and inconsistent font types and sizes. In addition, they contain curved, multi-skewed, and multi-directed side note lines Figure \ref{fig:text line problems} within a complex page layout. Therefore, bounding polygon labeling would be very difficult and time consuming. Instead, they rely on line masks that connect the components on the same text line. Then these line masks are predicted using a Fully Convolutional Network (\acrshort{fcn}). \acrshort{fcn} has been successfully used for text line segmentation of regular handwritten document images. This paper shows that \acrshort{fcn} is useful with challenging manuscript images as well. Using a new evaluation metric that is sensitive to over segmentation as well as under segmentation.Tested on the new challenging handwritten document dataset. The model achieved 89\% training accuracy and 88\% validation accuracy on average.
+of challenging historical manuscript images. These manuscript images contain narrow interline spaces with touching components, interpenetrating vowel signs, and inconsistent font types and sizes. In addition, they contain curved, multi-skewed, and multi-directed side note lines figure \ref{fig:text line problems} within a complex page layout. Therefore, bounding polygon labeling would be very difficult and time consuming. Instead, they rely on line masks that connect the components on the same text line. Then these line masks are predicted using a Fully Convolutional Network (\acrshort{fcn}). \acrshort{fcn} has been successfully used for text line segmentation of regular handwritten document images. This paper shows that \acrshort{fcn} is useful with challenging manuscript images as well. Using a new evaluation metric that is sensitive to over segmentation as well as under segmentation.Tested on the new challenging handwritten document dataset. The model achieved 89\% training accuracy and 88\% validation accuracy on average.
 
 \begin{figure}[!htb]
     \centering
@@ -755,7 +755,7 @@ Arabic writing is cursive; therefore, words and subwords are separated by spaces
 \begin{itemize}[labelindent=1em,labelsep=0.25cm,leftmargin=*]
         \item[\char `A)] \textbf{Baseline Detection:-}
         Before  segmenting  the  Arabic  words,  we  need  to detect  the  baseline  as  it  is  believed  that  this  baseline  is  very  essential  in  analyzing  Arabic  text.  Since  the  Arabic  letters  are  usually written along the baseline, hopefully, there should be a peak in the baseline position when we project the written line along the vertical axis of the image.
-        The  improved result is shown in Figure \ref{fig:basline}
+        The  improved result is shown in figure \ref{fig:basline}
  
          \begin{figure}[!htb]
             \centering
@@ -776,7 +776,7 @@ Figure \ref{fig:subword} shows three Arabic words consisting of one, two, and th
     \label{fig:subword}
 \end{figure}
 
-The connected components (\acrshort{cc}s) for the line image must be determined.  The  \acrshort{cc}s  are  rectangular  boxes  bounding  together  regions of connected objects. The objective of the \acrshort{cc}s phase is to  form  rectangles  around  the  connected  object  on  the  image.    The algorithm used to obtain the \acrshort{cc}s  are  the  iterative procedure that compares any black pixels in any pair of the line are connected together.    Bounding rectangles are  extended  to  enclose  any  grouping  of  connected  black  pixels.  Figure. \ref{fig:ccs}(a) shows the output of the \acrshort{cc}s.  With extracted connect components,    sub-words are segmented  as  follows.  Firstly,  small  parts  like  dots  in  the  image  are  temporally  ignored.  Secondly,  components  whose  coordinates  are  overlapped  on  the x-axis  are  merged  to  obtain  a  combined  large  component,  namely  a sub-word.  Thirdly,  the  distance  of  each  pair  of  consecutive  sub-words  is  obtained,  which will be used to segment words in the next section.
+The connected components (\acrshort{cc}s) for the line image must be determined.  The  \acrshort{cc}s  are  rectangular  boxes  bounding  together  regions of connected objects. The objective of the \acrshort{cc}s phase is to  form  rectangles  around  the  connected object on the image. The algorithm used to obtain the \acrshort{cc}s  are  the  iterative procedure that compares any black pixels in any pair of the line are connected together. Bounding rectangles are  extended to enclose any grouping  of connected black pixels. Figure \ref{fig:ccs}(a) shows the output of the \acrshort{cc}s. With extracted connect components,sub-words are segmented as follows. Firstly, small parts like dots in the image  are  temporally  ignored. Secondly, components whose coordinates are overlapped on the x-axis are merged to obtain a combined large  component, namely a sub-word. Thirdly, the distance of each pair of consecutive sub-words is obtained, which will be used to segment words in the next section.
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=6cm]{images/ccs.png}
@@ -812,7 +812,7 @@ Word spotting techniques are used to explore and research in the content of Arab
 
 In \cite{Noureddine} presents a method that facilitates access to the content of images. This method is based on the invariant local detectors and descriptors (scale, rotation, brightness variations) for the detection of this information in the Arabic manuscripts. Word spotting technique allows the matching process between the handwritten words of the query images with the target images. 
 
-The proposed method for the characterization of images of Arabic manuscripts. In the same way, as in the field of the recognition of Latin texts shown in Figure \ref{fig:noureddine-word-spotting-results}.
+The proposed method for the characterization of images of Arabic manuscripts. In the same way, as in the field of the recognition of Latin texts shown in the figure \ref{fig:noureddine-word-spotting-results}.
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=13cm]{images/noureddine-word-spotting.png}
@@ -836,7 +836,7 @@ The proposed method for the characterization of images of Arabic manuscripts. In
             f(y) = \sum_{x=0}^w I(x, y)
         \end{equation}
         
-        The project profile $f(y)$ of the image $I$ for the line x is illustrated in Figure \ref{fig:noureddine-word-line}. Additional high-frequency noise may affect this function. In this case, it is necessary to smooth this signal with the aid of a filter, we can perform a convolution with a Gaussian filter in the equation \ref{equ:gaussian-filter} in order to eliminate the high-frequency noise in the signal of the function in the equation \ref{equ:signal-function}
+        The project profile $f(y)$ of the image $I$ for the line x is illustrated in the figure \ref{fig:noureddine-word-line}. Additional high-frequency noise may affect this function. In this case, it is necessary to smooth this signal with the aid of a filter, we can perform a convolution with a Gaussian filter in the equation \ref{equ:gaussian-filter} in order to eliminate the high-frequency noise in the signal of the function in the equation \ref{equ:signal-function}
         
         \begin{equation}
             p(y) = f(y)*g(y,\sigma) 
@@ -850,7 +850,7 @@ The proposed method for the characterization of images of Arabic manuscripts. In
         
         \item[\char `C)] \textbf{Word Segmentation:-} \\
         In order to extract all the information in each word to facilitate the task to the processing algorithms. Some image preprocessing techniques like applying binary images for the extraction of the related components, then morphological dilation of the binary images allows the fusion of the isolated characters and the pseudo-words. The projection at each line provides the words. The main problem with this technique is its sensitivity to overlapping words. Detection of the related components at the level of each line in the binary images to also locate the words.
-        The following Figure \ref{fig:noureddine-word-line} shows an example of segmentation of elements (isolated characters, pseudo words, and words).
+        The following figure \ref{fig:noureddine-word-line} shows an example of segmentation of elements (isolated characters, pseudo words, and words).
         
         \begin{figure}[!htb]
             \centering
@@ -865,7 +865,7 @@ The proposed method for the characterization of images of Arabic manuscripts. In
         \item[\char `E)] \textbf{Classification, Matching and Decision:-} \\
         By using SURF interest points. The comparison between two interest points can be done with several methods. Choice of such a method can be made per processing costs. Interest points are characterized by their properties. The comparison can therefore be carried out in two stages: The first step of comparison between two points is carried out by examining the signs of traces of the Hessian matrix. The sign of the trace of the Hessian matrix thus represents the sign of the Laplacian and the meaning of blobs. The second step of the comparison consists in calculating the distance between the descriptor vectors of the two interest points. The most commonly used comparison methods are based on correlation and on the calculation of vector distances. The distance between two vectors v and u of the two descriptors of interest points can be calculated with the Euclidean distance or with the Mahalanobis distance.
         \item[\char `F)] \textbf{Results and application GUI:-} \\
-        The results of matching with the Word Spotting method give many occurrences of the name "Mohamed \<محمد>" equal to twice shown in Figure \ref{fig:noureddine-word-spotting-results}. We used three types of query images (color, grayscale and binary) and we got the same result. Therefore, this method can be applied to a set of images of the same manuscript, which makes it possible to search all the occurrences of the query word
+        The results of matching with the Word Spotting method give many occurrences of the name "Mohamed \<محمد>" equal to twice shown in figure \ref{fig:noureddine-word-spotting-results}. We used three types of query images (color, grayscale and binary) and we got the same result. Therefore, this method can be applied to a set of images of the same manuscript, which makes it possible to search all the occurrences of the query word
 
         \begin{figure}[!htb]
             \centering
