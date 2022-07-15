@@ -77,7 +77,7 @@ Image enhancement improves the quality of images for human perception by removin
         \item[\char `A)] \textbf{Resize Image:-}\\
         Images are normalized into a specific size, decided empirically or experimentally depending on the application and the feature extraction or classification techniques used, then features are extracted from all images  with the same size in order to provide data uniformity. 
         \item[\char `B)] \textbf{Normalization:-}\\  
-        The Histogram Equalization \cite{equalization} evenly distributes the occurrence of pixel intensities so that the entire range of intensities is considered. This method usually increases the global contrast of images, especially when the usable data of the image is represented by close contrast values. Through this adjustment, the intensities can be better distributed on the histogram. This allows for areas of lower local contrast to gain a higher contrast. Histogram equalization accomplishes this by effectively spreading out the most frequent intensity values. Then probability density function (pdf) is calculated for the histogram shown Figure\ref{fig:equalize}.
+        The Histogram Equalization \cite{equalization} evenly distributes the occurrence of pixel intensities so that the entire range of intensities is considered. This method usually increases the global contrast of images, especially when the usable data of the image is represented by close contrast values. Through this adjustment, the intensities can be better distributed on the histogram. This allows for areas of lower local contrast to gain a higher contrast. Histogram equalization accomplishes this by effectively spreading out the most frequent intensity values. Then probability density function (pdf) is calculated for the histogram shown figure \ref{fig:equalize}.
         \begin{figure}[!htb]
             \centering
             \includegraphics[width=11cm]{images/equalize.png}
@@ -97,7 +97,7 @@ Image enhancement improves the quality of images for human perception by removin
         A grayscale (or graylevel) image is simply one in which the only colors are shades of gray. The reason for differentiating such images from any other sort of color image is that less information needs to be provided for each pixel.so, it is only necessary to specify a single intensity value for each pixel, as opposed to the three intensities needed to specify each pixel in a full-color image.
         grayscale images are entirely sufficient for an easy process and so there is no need to use more complicated and harder-to-process color images.
         
-        the input RGB fundus image $(I)$ is converted to a grayscale image ($Ig$) using Eq.\ref{equ:gray}.
+        the input RGB fundus image $(I)$ is converted to a grayscale image ($Ig$) using equation \ref{equ:gray}.
         
         \begin{equation}
             Ig = 0.2989 * IR + 0.5870 * IG + 0.1140 * IB
@@ -105,7 +105,7 @@ Image enhancement improves the quality of images for human perception by removin
         \end{equation}
         \item[\char `E)] \textbf{Gaussian Thresholding (OTSU):-}\\
         The goal of thresholding \cite{thresholding} an image is to classify pixels as either “dark” or “light”.\\
-        There are numerous methods for image thresholding which already been used by some researchers. The most common thresholding method has been proposed by Otsu . Otsu’s method works better where the clear separation between foreground and background exists or where image illumination is not variable shown in figure \ref{fig:otsu}. However, real-life images possess especially in handwriting images various kinds of degradations (e.g. illumination contrast, skewed, stains, and noise) that weaken the thresholding proposed by Otsu’s. Gaussian thresholding (OTSU) with binary inverse shown in figure\ref{fig:otsubnv}.
+        There are numerous methods for image thresholding which already been used by some researchers. The most common thresholding method has been proposed by Otsu . Otsu’s method works better where the clear separation between foreground and background exists or where image illumination is not variable shown in figure \ref{fig:otsu}. However, real-life images possess especially in handwriting images various kinds of degradations (e.g. illumination contrast, skewed, stains, and noise) that weaken the thresholding proposed by Otsu’s. Gaussian thresholding (OTSU) with binary inverse shown in figure \ref{fig:otsubnv}.
         \begin{figure}[!htb]
             \centering
             \includegraphics[width=11cm]{images/otsu.png}
@@ -124,7 +124,7 @@ Image enhancement improves the quality of images for human perception by removin
         background such as show-through effects, interfering strokes
         due to the seeping of ink during a long period of storage, spots of
         humidity and curvature effect. Example for the image before
-        using the filter method shown in figure\ref{fig:bfmed} 
+        using the filter method shown in figure \ref{fig:bfmed} 
         
         \begin{figure}[!htb]
             \centering
@@ -135,7 +135,7 @@ Image enhancement improves the quality of images for human perception by removin
         
         In median filtering \cite{median}, the neighboring pixels are ranked
         according to brightness (intensity) and the median value
-        becomes the new value for the central pixel, shown in figure\ref{fig:afmed}.
+        becomes the new value for the central pixel, shown in figure \ref{fig:afmed}.
         the value of an output pixel is determined by the median of the
         neighborhood pixels.
         
@@ -206,7 +206,7 @@ As it can be seen above and in general in any morphological operation the struct
 \noindent
 A structuring element is a matrix consisting of only 0's and 1's that can have any arbitrary shape and size. Typically are much smaller than the image being processed, while the pixels with values of 1 define the neighborhood. The center pixel of the structuring element, called the origin, identifies the pixel of interest – the pixel being processed.
 \noindent
-For example, Figure\ref{fig:structuring-element} illustrates a diamond-shaped structuring element of 7x7 size.
+For example, figure \ref{fig:structuring-element} illustrates a diamond-shaped structuring element of 7x7 size.
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=5cm]{images/SE.png}
@@ -376,7 +376,7 @@ the process of dividing the written text into meaningful units, such as words, a
      \item[\char `A)] \textbf{Gray Scaling:- } \\ 
         This step to change the pixels of an image to gray in order to  make the image easier to analyze.
         applying grayscaling on the input line shown
-        in figure\ref{fig:origin}  to grayscale shown in figure\ref{fig:gray}
+        in figure \ref{fig:origin}  to grayscale shown in figure \ref{fig:gray}
         
         \item[\char `B)] \textbf{Thresholding:- } \\ 
         This step to change the pixels of an image to black and white in order to  make the image easier to analyze.
@@ -546,7 +546,7 @@ In the context of Zero-shot learning “class/attribute signatures”, represent
 \subsubsection{PHOS}
 In \acrfull{zsl}, the test query images can contain words that the model did not see during training. This is a more challenging task requiring a visual representation (akin to the semantic embedding in \acrshort{zsl} literature) that can bridge the set of seen and unseen words. A visual characterization of words to learn a mapping between word-images and their corresponding word labels such that it can also be used to recognize out-of-lexicon words called \acrfull{phos} \cite{PHOSC}. The PHOS representation encodes the primary shapes of character strokes of different word segments in a hierarchical manner. We use a deep convolutional network to learn the PHOS representation from images of words present in the training lexicon. \\
 
-Since \acrshort{phos} encodes the visual features of the characters (perform zero-shot word recognition) that are missed by PHOC and therefore is more suitable to recognize unseen words. Central to the PHOS representation is the assumption that every character can be described in terms of a set of primitive shape attributes \cite{ZEROSHOT}. We consider the following set of primitive shapes for Arabic language as illustrated in figure\ref{fig:arabic-primary-shape}. Only the counts of these shapes is insufficient to adequately characterize each word uniquely. Inspired by the pyramidal capture of occurrence and position of characters in a word, we propose the pyramidal histogram of shapes that helps in characterizing each word uniquely.
+Since \acrshort{phos} encodes the visual features of the characters (perform zero-shot word recognition) that are missed by PHOC and therefore is more suitable to recognize unseen words. Central to the PHOS representation is the assumption that every character can be described in terms of a set of primitive shape attributes \cite{ZEROSHOT}. We consider the following set of primitive shapes for Arabic language as illustrated in figure \ref{fig:arabic-primary-shape}. Only the counts of these shapes is insufficient to adequately characterize each word uniquely. Inspired by the pyramidal capture of occurrence and position of characters in a word, we propose the pyramidal histogram of shapes that helps in characterizing each word uniquely.
 
 \begin{figure}[!htb]
     \centering
