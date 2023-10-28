@@ -1,7 +1,11 @@
 # arabic-manuscript
 This is our graduation project for arabic manuscript detection and recognition
 
-### Related documents
+## Applications
+- [Web Application](https://github.com/space-codes/asar.web)
+- [Mobile Application](https://github.com/space-codes/asar.mobile)
+
+## Related documents
 - [Deployed site](http://asar.eastasia.cloudapp.azure.com)
 - [Book link](https://www.overleaf.com/3856911155ghxyztqchcvn)
 - [Discussion Slides](https://docs.google.com/presentation/d/1ZVqSNqtKEBhGl5v5d2c8qlbQ0YwK1pnq/edit?usp=sharing&ouid=117589950685366286966&rtpof=true&sd=true)
