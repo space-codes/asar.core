@@ -3,7 +3,7 @@ from preprocessing import morphological_operation,gaus_thresh
 from line_and_word_segmentation_with_contour import line_segmentation
 
 # Read image
-image = cv2.imread('image2.png')
+image = cv2.imread('0011-1.png')
 
 # Apply Threshoding convert to binary image
 thresh = gaus_thresh(image)
